@@ -1,21 +1,43 @@
 import readlineSync from 'readline-sync'
+import fs from "fs"
+import clear from "clear-screen"
 
-const content = fs.readFileSync('MEGA_DUNGEON.txt', 'utf-8')
+function clearScreen() {
+    process.stdout.write('\u001B[2J\u001B[0f');
+}
+
 
 const menu = () => {
-    console.log("                                 Добро пожловать в текстовый квест...                                ")
-    console.log(content)                                                                                                                  
-    console.log("                            Игра основанная на системе D&D 5e редакции                               ")
-    console.log("                               От: Титановой сосиски (для курсовой)                                  ")
-    console.log("")
-    console.log("")
-    console.log("                             Для выбора действия введите нужное число:                               ")
-    console.log("")
-    console.log("                              1 : Продолжить на последнем сохранении                                 ")
-    console.log("                              2 :         Начать новую игру                                          ")
-    console.log("                              3 :             Загрузить                                              ")
-    console.log("                              4 :       Об игре и разработчики                                       ")
-    console.log("                              5 :             Достижения                                             ")
-    console.log("")
-    console.log("")
+    clearScreen()
+    const content = fs.readFileSync('../../assets/MEGA_DUNGEON.txt', 'utf-8')
+    const content1 = fs.readFileSync('../../assets/about.txt', 'utf-8')
+    console.log(content)
+    const action = 0
+    while (action === "1" || action === "2" || action === "3") {
+        action = readlineSync.question('Action: ')
+        switch (action) {
+            case "1":
+                //незаконченно
+                break
+            case "2":
+                //незаконченно
+                break
+            case "3":
+                //незаконченно
+                break
+            case "4":
+                clearScreen()
+                console.log(content1)
+                break
+            case "5":
+                //незаконченно
+                break
+            default:
+                console.log(1)
+                break   
+        }   
+    }
+    
 }
+
+console.log(menu())
