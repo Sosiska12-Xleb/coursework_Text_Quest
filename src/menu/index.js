@@ -1,6 +1,8 @@
 import readlineSync from 'readline-sync'
 import fs from "fs"
-import { about } from './about.js';
+import { about } from './about.js'
+import { achievements } from './achievements.js'
+import { newGame } from './newGame.js'
 
 function clearScreen() {
     process.stdout.write('\u001B[2J\u001B[0f');
@@ -19,20 +21,21 @@ const menu = () => {
                 //незаконченно
                 return
             case "2":
-                //незаконченно
-                return
+                clearScreen()
+                return newGame()
             case "3":
                 //незаконченно
                 return
             case "4":
                 clearScreen()
-                about()
-                break
+                return about()
             case "5":
-                //незаконченно
-                break
+                clearScreen()
+                return achievements()
+            case "6":
+                return "Иницализация выхода..."
             default:
-                console.log(1)
+                console.log("Некорректный ввод команды, пожалуйста введите только число")
                 break   
         }   
     }
@@ -40,3 +43,5 @@ const menu = () => {
 }
 
 console.log(menu())
+
+export { menu }
