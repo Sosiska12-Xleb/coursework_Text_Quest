@@ -3,7 +3,7 @@ import fs from "fs"
 import { menu } from './index.js'
 
 const achievements = () => {
-    const content = fs.readFileSync('../../assets/achievements.txt', 'utf-8')
+    const content = fs.readFileSync('assets/achievements.txt', 'utf-8')
     console.log(content)
 
     //незакончено

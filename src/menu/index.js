@@ -11,7 +11,7 @@ function clearScreen() {
 
 const menu = () => {
     clearScreen()
-    const content = fs.readFileSync('../../assets/MEGA_DUNGEON.txt', 'utf-8')
+    const content = fs.readFileSync('assets/MEGA_DUNGEON.txt', 'utf-8')
     console.log(content)
     let action = ""
     while (action !== "1" || action !== "2" || action !== "3") {
@@ -33,7 +33,8 @@ const menu = () => {
                 clearScreen()
                 return achievements()
             case "6":
-                return "Иницализация выхода..."
+                console.log("Иницализация выхода...")
+                return 
             default:
                 console.log("Некорректный ввод команды, пожалуйста введите только число")
                 break   
@@ -41,7 +42,5 @@ const menu = () => {
     }
     
 }
-
-console.log(menu())
 
 export { menu }

@@ -3,7 +3,7 @@ import fs from "fs"
 import { menu } from './index.js'
 
 const about = () => {
-    const content = fs.readFileSync('../../assets/aboutProject.txt', 'utf-8')
+    const content = fs.readFileSync('assets/aboutProject.txt', 'utf-8')
     console.log(content)
     let action = readlineSync.question('Action: ')
     switch (action) {
