@@ -1,58 +1,60 @@
 export let player = {
 
     characteristic: {
-    strenght: -1,
-    dexterity: -1,
-    physique: -1,
-    intelligence: -1,
-    wisdom: -1,
-    charisma: -1
+    strenght: 0,
+    dexterity: 0,
+    physique: 0,
+    intelligence: 0,
+    wisdom: 0,
+    charisma: 0
     },
 
     savingThrow: {
-    strenght: characteristic.strenght,
-    dexterity: characteristic.dexterity,
-    physique: characteristic.physique,
-    intelligence: characteristic.intelligence,
-    wisdom: characteristic.wisdom,
-    charisma: characteristic.charisma
+    strenght: 0,
+    dexterity: 0,
+    physique: 0,
+    intelligence: 0,
+    wisdom: 0,
+    charisma: 0
     },
 
     skills: {
-    acrobatics: characteristic.dexterity,
-    analysis: characteristic.intelligence,
-    athletics: characteristic.strenght,
-    attentiveness: characteristic.wisdom,
-    survival: characteristic.wisdom,
-    performance: characteristic.charisma,
-    intimidation: characteristic.charisma,
-    history: characteristic.intelligence,
-    sleight_of_hand: characteristic.dexterity,
-    magic: characteristic.intelligence,
-    medicine: characteristic.wisdom,
-    deception: characteristic.charisma,
-    nature: characteristic.intelligence,
-    insight: characteristic.wisdom,
-    religion: characteristic.intelligence,
-    stealth: characteristic.dexterity,
-    belief: characteristic.charisma,
-    animal_care: characteristic.wisdom
+    acrobatics: 0,
+    analysis: 0,
+    athletics: 0,
+    attentiveness: 0,
+    survival: 0,
+    performance: 0,
+    intimidation: 0,
+    history: 0,
+    sleight_of_hand: 0,
+    magic: 0,
+    medicine: 0,
+    deception: 0,
+    nature: 0,
+    insight: 0,
+    religion: 0,
+    stealth: 0,
+    belief: 0,
+    animal_care: 0
     },
 
     stats: {
     class: "",
+    subclass: "",
     level: 0,
     exp: 0,
     ac: 10,
-    initiative: characteristic.dexterity,
+    initiative: 0,
     speed: 30,
     max_hits: 0,
-    hits: stats.max_hits,
+    hits: 0,
     time_hits: 0,
+    hits_dice: 0
     },
 
     skillBonus: 2,
-    passivWisdom: 10 + skills.attentiveness,
+    passivWisdom: 10,
 
     otherHoldings: {
     armor: [],

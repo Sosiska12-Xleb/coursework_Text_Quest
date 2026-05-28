@@ -2,7 +2,7 @@ import readlineSync from 'readline-sync'
 import fs from "fs"
 import { about } from './about.js'
 import { achievements } from './achievements.js'
-import { newGame } from './newGame.js'
+import { characteristicChoose } from './newGame.js'
 
 function clearScreen() {
     process.stdout.write('\u001B[2J\u001B[0f');
@@ -22,7 +22,7 @@ const menu = () => {
                 return
             case "2":
                 clearScreen()
-                return newGame()
+                return characteristicChoose()
             case "3":
                 //незаконченно
                 return
@@ -36,11 +36,10 @@ const menu = () => {
                 console.log("Иницализация выхода...")
                 return 
             default:
-                console.log("Некорректный ввод команды, пожалуйста введите только число")
+                console.log("Некорректный ввод команды, пожалуйста введите только число из меню")
                 break   
         }   
     }
-    
 }
 
 export { menu }
