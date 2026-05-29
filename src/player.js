@@ -42,7 +42,8 @@ export let player = {
     stats: {
     class: "",
     subclass: "",
-    level: 0,
+    race: "",
+    level: 1,
     exp: 0,
     ac: 10,
     initiative: 0,
@@ -64,7 +65,12 @@ export let player = {
     tools: [],
     },
 
-    inventory: [],
+    inventory: {
+    armors: {armor: 0, shield: 0},
+    weapon: {firstWeapon: 0, secondWeapon: 0},
+    Activstorage: [],
+    defaultStorage: []
+    },
 
     coins: {
     copper: 0,
@@ -79,10 +85,12 @@ export let player = {
 
 
     baseSpellcastingCharacteristic: "",
-    savingThrowDifficulty: 10,
+    savingThrowDifficulty: 8,
     spellAttackBonus: 0,
 
     cells: {
+    conspiracy: 0,
+    famousSpells: 0,    
     circle1: 0,
     circle2: 0,
     circle3: 0,
