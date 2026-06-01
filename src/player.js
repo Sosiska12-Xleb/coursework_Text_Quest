@@ -66,8 +66,8 @@ export let player = {
     },
 
     inventory: {
-    armors: {armor: 0, shield: 0},
-    weapon: {firstWeapon: 0, secondWeapon: 0},
+    armors: {armor: "", shield: ""},
+    weapon: {firstWeapon: "", secondWeapon: ""},
     Activstorage: [],
     defaultStorage: []
     },
