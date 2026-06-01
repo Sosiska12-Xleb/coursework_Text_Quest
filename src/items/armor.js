@@ -27,5 +27,6 @@ export const armors = {
     stackedArmor: {name: "Наборный", price: 200, ac: 17, strenghtRequirement: 15, stealth: false},
     plateArmor: {name: "Латы", price: 1500, ac: 18, strenghtRequirement: 15, stealth: false},
     },
-    shield: {name: "Щит", price: 10, ac: 2, strenghtRequirement: 0}
+    shield: {name: "Щит", price: 10, ac: 2, strenghtRequirement: 0},
+    woodenShield: {name: "Деревянный щит", price: 10, ac: 2, strenghtRequirement: 0}
 }
