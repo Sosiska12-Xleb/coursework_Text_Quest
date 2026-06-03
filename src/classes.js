@@ -33,7 +33,7 @@ export let classes = {
                 },
                 defense: {name: "Оборона", bonusAc: 1, explanation: "Пока вы носите доспехи, вы получаете бонус +1 к КД."},
                 fightingWithBigWeapon: {
-                    name: "Сражение большим оружием", advantageStrenght: advantageDice(),
+                    name: "Сражение большим оружием", advantageStrenght: advantageDice(20),
                     explanation: "Если результат броска урона равен 1 или 2, то кость перебрасывается пока результат не будет выше 2. Работет если вы удерживаете оружие со свойством 'Двуручное' или 'Универсальное'." 
                 },
                 battleWithTwoWeapons: {
@@ -55,8 +55,71 @@ export let classes = {
     },
     druid: {
         level1: {
-            druidLanguage: {name: "Друидический язык", language: "Друидический язык" , explanation: "Вы знаете Друидический язык — тайный язык друидов."},
-            
+            druidLanguage: {name: "Друидический язык" , explanation: "Вы знаете Друидический язык — тайный язык друидов."}
         }
+    },
+    cleric: {
+        level1: {}
+    },
+    artificer: {
+        level1: {
+            manicArtisan: {name: "Магический мастеровой", explanation: "Действием вы можете наделить крошечный предмет магическим свойством, осающееся с ним навсегда.", action: act,               
+                magicalProperties: {
+                    light: {name: "Свет", lightFactor: 10, explanation: "Предмет излучает свет в пределах 10 футов."},
+                    abstraction: {name: "Отвлечение", savingThrowDifficulty: 9, explanation: "Предмет испускает запах и издает громкие звуки, его можно бросить для шанса отвлечь внимание."}
+                }
+            }
+        }
+    },
+    warlock: {
+        level1: {}
+    },
+    monk: {
+        level1: {
+            defenseWithoutArmor: {
+                name: "Защита без доспехов", defence: 10 + player.characteristic.dexterity + player.characteristic.wisdom,
+                explanation: "Если вы не носите доспехов, ваш КД равен 10 + модиф. ЛОВКОСТИ + модиф. МУДРОСТИ."
+            },
+            martialArts: {
+                name: "Боевые исскуства", attackThrow: player.savingThrow.dexterity, damageThrow: player.savingThrow.dexterity, martialArtsDice: diceRandomizer(4),
+                bonusKick: {
+                        name: "Бонусный удар", bonusAttack: diceRandomizer(4),
+                        explanation: "Совершив в свой ход действие Атака безоружным ударом или монашеским оружием, бонусным действием можно совершить дополнительную атаку кулаком.", action: bonus
+                    },
+                explanation: "Вы познали боевые исскуства и можете их использовать в безоружном бою, или используя короткие мечи и другие оружия без свойства 'Двуручное', 'Тяжёлое', при этом не нося доспехи."
+            }
+        }
+    },
+    paladin: {
+        level1: {
+            divineFeeling: {
+                name: "Божественное чувство",
+                explanation: "Применив особенность перед вхождением в другую комнаты вы не сможете быть застигнуты в расплох и вы всегда знаете где находятся враги Исчадиями, Небожителями и Нежитью."
+            },
+            layingOnOfHands: {
+                name: "Наложение рук", heal: player.stats.level * 5,
+                explanation: "Действием вы можете прикоснуться к существу и восстановить хитов равное уровню паладина * 5."
+            }
+        }
+    },
+    rogue: {
+        level1: {
+            sneakAttack: {
+                name: "Скрытая атака", bonusDamage: 6,
+                explanation: "Раз в ход вы наносте дополнительный урон оружием со свойством Фехтовальное или Дальнобойное оружие. Броски таким оружием совершается с преимуществом."
+            },
+            thievesJargon: {name: "Воровской жаргон", explanation: "Вы знаете воровской жаргон."}
+        }
+    },
+    ranger: {
+        level1: {
+            natureExplorer: {
+                name: "Исследователь природы", stealthBonus: advantageDice(20),
+                explanation: "Вы хорошо знакомы с подземельями и получаете преимущества в этих местах. Вы игнорируете труднопроходимую местность, находите в 2 раза больше припасов и имеете преимущество в броске скрытности."
+            }
+        }
+    },
+    sorcerer: {
+        
     }
 }

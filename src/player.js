@@ -99,7 +99,9 @@ export let player = {
     circle6: 0,
     circle7: 0,
     circle8: 0,
-    circle9: 0
+    circle9: 0,
+    spellSlots: 1,
+    spellsLevel: 0
     },
 
     spells: {
