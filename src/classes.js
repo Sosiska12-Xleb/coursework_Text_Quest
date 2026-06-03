@@ -120,6 +120,6 @@ export let classes = {
         }
     },
     sorcerer: {
-        
+        level1: {}
     }
 }

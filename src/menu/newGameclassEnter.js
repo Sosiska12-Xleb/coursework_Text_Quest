@@ -81,9 +81,8 @@ export const newGameclassEnter = (num) => {
             player.savingThrow.intelligence = player.characteristic.intelligence + player.skillBonus
             player.savingThrow.wisdom = player.characteristic.wisdom + player.skillBonus
             player.savingThrow.charisma = player.characteristic.charisma
-            player.inventory.defaultStorage.push("Книга заклинаний")
             player.inventory.firstWeapon = "Кинжал"
-            player.inventory.Activstorage.push("Посох")
+            player.inventory.Activstorage.push("Посох", "Книга заклинаний")
             player.stats.initiative = player.characteristic.dexterity
             player.stats.class = "Волшебник"
             player.stats.hits_dice = 6
@@ -315,26 +314,25 @@ export const newGameclassEnter = (num) => {
             console.log("|  Вводим всякое от ЧАРОДЕЯ в лист персонажа...                                                                                  |")
             player.savingThrow.strenght = player.characteristic.strenght
             player.savingThrow.dexterity = player.characteristic.dexterity
-            player.savingThrow.physique = player.characteristic.physique
-            player.savingThrow.intelligence = player.characteristic.intelligence + player.skillBonus
-            player.savingThrow.wisdom = player.characteristic.wisdom + player.skillBonus
-            player.savingThrow.charisma = player.characteristic.charisma
-            player.inventory.defaultStorage.push("Книга заклинаний")
-            player.inventory.firstWeapon = "Кинжал"
-            player.inventory.Activstorage.push("Посох")
+            player.savingThrow.physique = player.characteristic.physique + player.skillBonus
+            player.savingThrow.intelligence = player.characteristic.intelligence
+            player.savingThrow.wisdom = player.characteristic.wisdom
+            player.savingThrow.charisma = player.characteristic.charisma + player.skillBonus
+            player.inventory.firstWeapon = "Лёгкий арболет"
+            player.inventory.defaultStorage.push("Кинжал", "Кинжал")
+            player.inventory.Activstorage.push("Волшебная палочка")
             player.stats.initiative = player.characteristic.dexterity
             player.stats.class = "Чародей"
             player.stats.hits_dice = 6
             player.stats.max_hits = player.stats.hits_dice + player.characteristic.physique
             player.stats.hits = player.stats.max_hits
-            player.otherHoldings.weapon.push("Кинжал", "Дротик", "Праща", "Боевой посох", "Легкий арбалет")
-            player.skillsAndAbilities.push("Магическое восстановление")
-            player.baseSpellcastingCharacteristic = "ИНТЕЛЛЕКТ"
-            player.savingThrowDifficulty = 8 + player.characteristic.intelligence + player.skillBonus
-            player.spellAttackBonus = player.characteristic.intelligence + player.skillBonus
-            player.cells.conspiracy = 3
-            player.cells.famousSpells = player.characteristic.intelligence + player.stats.level
-            player.cells.circle1 = 2
+            player.otherHoldings.weapon.push("Боевой посох", "Дротик", "Кинжал", "Легкий арбалет", "Праща")
+            player.baseSpellcastingCharacteristic = "ХАРИЗМА"
+            player.savingThrowDifficulty = 8 + player.characteristic.charisma + player.skillBonus
+            player.spellAttackBonus = player.characteristic.charisma + player.skillBonus
+            player.cells.conspiracy = 4
+            player.cells.famousSpells = 2
+            player.cells.circle1 = 1
             console.log("|  Первичная запись значений ЧАРОДЕЯ завершена успешно!                                                                          |")
         
     }

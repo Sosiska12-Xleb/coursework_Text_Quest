@@ -10,7 +10,7 @@ export const advantageDice = (num) => {
     }
 }
 
-export const hindranceDice = () => {
+export const hindranceDice = (num) => {
     const throw1 = diceRandomizer(num)
     const throw2 = diceRandomizer(num)
     if (throw1 >= throw2) {
