@@ -1,5 +1,4 @@
-import { player } from '../player.js'
-import { diceRandomizer } from "./diceRandomizer"
+import { diceRandomizer } from "../diceRandomizer.js"
 
 export const arms = {
     simpleHandWeapons: {
@@ -41,9 +40,9 @@ export const arms = {
         chain: {name: "Цеп", price: 10, damage: diceRandomizer(8), property: []}
     },
     militaryRangeWeapon: {
-        lightCrossbow: {name: "Ручной арбалет", price: 75, damage: diceRandomizer(6), property: ["Легкое"]},
-        lightCrossbow: {name: "Тяжёлый арбалет", price: 50, damage: diceRandomizer(10), property: ["Двуручное", "Тяжелое"]},
-        lightCrossbow: {name: "Длинный лук", price: 50, damage: diceRandomizer(8), property: ["Двуручное", "Тяжелое"]},
-        lightCrossbow: {name: "Духовая трубка", price: 10, damage: 1, property: []}
+        handCrossbow: {name: "Ручной арбалет", price: 75, damage: diceRandomizer(6), property: ["Легкое"]},
+        heavyCrossbow: {name: "Тяжёлый арбалет", price: 50, damage: diceRandomizer(10), property: ["Двуручное", "Тяжелое"]},
+        longBow: {name: "Длинный лук", price: 50, damage: diceRandomizer(8), property: ["Двуручное", "Тяжелое"]},
+        blowpipe: {name: "Духовая трубка", price: 10, damage: 1, property: []}
     }
 }

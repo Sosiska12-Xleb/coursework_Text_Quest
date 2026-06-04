@@ -2,7 +2,9 @@ import readlineSync from 'readline-sync'
 import fs from "fs"
 import { menu } from './index.js'
 import { player } from '../player.js'
-import { newGameclassEnter } from './newGameclassEnter.js'
+import { armors } from '../items/armor.js'
+import { arms } from '../items/arms.js'
+
 
 const characteristicChoose = () => {
     const content = fs.readFileSync('assets/newGame_images/newGameMenu1.txt', 'utf-8')
@@ -50,26 +52,23 @@ const characteristicChoose = () => {
                 player.characteristic.wisdom = Number(characteristics[4])
                 player.characteristic.charisma = Number(characteristics[5])
                 console.log("|  Ваши характеристики успешно записанны!                                                                                        |")
-                return statsChoose()
+                return inventoryChoose()
         }
     }         
 }
 
 
-const statsChoose = () => {
-    const content = fs.readFileSync('assets/newGame_images/newGameMenu2.txt', 'utf-8')
+const inventoryChoose = () => {
+    const content = fs.readFileSync('assets/newGame_images/newGameMenu1.txt', 'utf-8')
     console.log(content)
-    let action = ""
-    while (action !== "1") {
-        action = readlineSync.question('|  Action: ')
-        if (Number(action) === 1) {
-            return menu()
-        } else if (Number(action) <= 14) {
-            newGameclassEnter(Number(action))
-            return 
-        } else {
-            console.log("|  Некорректный ввод, напишите толко число желаемого класса                                                                      |")
-        }
+    action = readlineSync.question('|  Action: ')
+    switch (action) {
+        case "1":
+            return characteristicChoose()
+        case "2":
+            player.inventory.armors.armor = armors.lightArmor.quiltedArmor
+            player.inventory.weapon.firstWeapon = arms.simpleHandWeapons.baton
+            player.inventory.storage = 
     }
 }
 

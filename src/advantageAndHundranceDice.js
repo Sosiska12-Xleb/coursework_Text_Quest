@@ -1,4 +1,4 @@
-import { diceRandomizer } from "./diceRandomizer"
+import { diceRandomizer } from "./diceRandomizer.js"
 
 export const advantageDice = (num) => {
     const throw1 = diceRandomizer(num)

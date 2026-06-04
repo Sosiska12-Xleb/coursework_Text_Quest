@@ -4,7 +4,7 @@ export const diceRandomizer = (num, quantity = 0) => {
     }
 
     let result = 0
-    for (i of quantity) {
+    for (const i in quantity) {
         result += Math.floor(Math.random() * num) + 1
     }
     return result
