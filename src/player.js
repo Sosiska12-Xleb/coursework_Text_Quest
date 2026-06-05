@@ -19,7 +19,8 @@ export let player = {
     inventory: {
     armors: {armor: "", shield: ""},
     weapon: {firstWeapon: "", secondWeapon: ""},
-    storage: [],
+    storageItemsStats: [],
+    storageNames: [],
     coins: 0
-    },
+    }
 }
