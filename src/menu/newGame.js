@@ -4,6 +4,7 @@ import { menu } from './index.js'
 import { player } from '../player.js'
 import { armors } from '../items/armor.js'
 import { arms } from '../items/arms.js'
+import { potions, magicstaffs, artifacts } from '../items/magicItems.js'
 
 
 const characteristicChoose = () => {
@@ -67,8 +68,25 @@ const inventoryChoose = () => {
             return characteristicChoose()
         case "2":
             player.inventory.armors.armor = armors.lightArmor.quiltedArmor
+            player.stats.ac = armors.lightArmor.quiltedArmor.ac
             player.inventory.weapon.firstWeapon = arms.simpleHandWeapons.baton
-            player.inventory.storage = 
+            player.inventory.storageItemsStats.push(potions.healingPotion, potions.healingPotion, potions.healingPotion, potions.resistancePotion)
+            player.inventory.storageNames.push(potions.healingPotion.name, potions.healingPotion.name, potions.healingPotion.name, potions.resistancePotion.name)
+        case "3":
+            player.inventory.armors.armor = armors.lightArmor.quiltedArmor
+            player.stats.ac = armors.lightArmor.quiltedArmor.ac
+            player.inventory.weapon.firstWeapon = arms.simpleHandWeapons.knife
+            player.inventory.weapon.secondWeapon = arms.simpleRangeWeapon.sling
+            player.inventory.storageItemsStats.push(potions.healingPotion, potions.healingPotion, potions.dexterityPotion)
+            player.inventory.storageNames.push(potions.healingPotion.name, potions.healingPotion.name, potions.dexterityPotion.name)
+        case "4":
+            player.inventory.weapon.firstWeapon = magicstaffs.basicMagicStaff
+            player.inventory.storageItemsStats.push(artifacts.tacticCrystal, potions.healingPotion, potions.healingPotion, potions.intelligencePotion)
+            player.inventory.storageNames.push(artifacts.tacticCrystal.name, potions.healingPotion.name, potions.healingPotion.name, potions.intelligencePotion.name)
+        case "5":
+            player.inventory.weapon.firstWeapon = magicstaffs.basicHealStaff
+            player.inventory.storageItemsStats.push(artifacts.amuletDrunkard, potions.healingPotion, potions.healingPotion, potions.healingPotion, potions.healingPotion)
+            player.inventory.storageNames.push(artifacts.amuletDrunkard.name, potions.healingPotion.name, potions.healingPotion.name, potions.healingPotion.name, potions.healingPotion.name)
     }
 }
 
