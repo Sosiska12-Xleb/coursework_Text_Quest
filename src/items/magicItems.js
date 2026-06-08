@@ -352,35 +352,35 @@ export const magicArmor = {
 
 
 export const magicstaffs = {
-    basicMagicStaff: {name: "Базовый посох магии", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 3, price: 300},
-    basicHealStaff: {name: "Базовый посох лечения", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 3, price: 300},
-    basicFireStaff: {name: "Базовый посох огня", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 3, price: 300},
-    basicVampirStaff: {name: "Базовый посох вампира", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 3, price: 300},
-    basicPoisonedStaff: {name: "Базовый посох яда", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 3, price: 300},
-    basicProtectionStaff: {name: "Базовый посох защиты", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 3, price: 300},
-    basicTactiсStaff: {name: "Базовый посох тактики", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 3, price: 300},
-    basicCharacteristictStaff: {name: "Базовый посох характеристик", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 3, price: 300},
-    basicAttackStaff: {name: "Базовый посох Атаки", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 3, price: 300},
+    basicMagicStaff: {name: "Базовый посох магии", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
+    basicHealStaff: {name: "Базовый посох лечения", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
+    basicFireStaff: {name: "Базовый посох огня", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
+    basicVampirStaff: {name: "Базовый посох вампира", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
+    basicPoisonedStaff: {name: "Базовый посох яда", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
+    basicProtectionStaff: {name: "Базовый посох защиты", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
+    basicTactiсStaff: {name: "Базовый посох тактики", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
+    basicCharacteristictStaff: {name: "Базовый посох характеристик", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
+    basicAttackStaff: {name: "Базовый посох Атаки", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
 
-    сustomizedMagicStaff: {name: "Настроенный посох магии", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 6, price: 3000},
-    customizedHealStaff: {name: "Настроенный посох лечения", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 6, price: 3000},
-    customizedFireStaff: {name: "Настроенный посох огня", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 6, price: 3000},
-    customizedVampirStaff: {name: "Настроенный посох вампира", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 6, price: 3000},
-    customizedPoisonedStaff: {name: "Настроенный посох яда", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 6, price: 3000},
-    customizedProtectionStaff: {name: "Настроенный посох защиты", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 6, price: 3000},
-    customizedTactiсStaff: {name: "Настроенный посох тактики", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 6, price: 3000},
-    customizedCharacteristictStaff: {name: "Настроенный посох характеристик", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 6, price: 3000},
-    customizedAttackStaff: {name: "Настроенный посох Атаки", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 6, price: 3000},
+    сustomizedMagicStaff: {name: "Настроенный посох магии", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
+    customizedHealStaff: {name: "Настроенный посох лечения", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
+    customizedFireStaff: {name: "Настроенный посох огня", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
+    customizedVampirStaff: {name: "Настроенный посох вампира", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
+    customizedPoisonedStaff: {name: "Настроенный посох яда", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
+    customizedProtectionStaff: {name: "Настроенный посох защиты", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
+    customizedTactiсStaff: {name: "Настроенный посох тактики", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
+    customizedCharacteristictStaff: {name: "Настроенный посох характеристик", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
+    customizedAttackStaff: {name: "Настроенный посох Атаки", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
 
-    higherMagicStaff: {name: "Высший посох магии", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 6000},
-    higherHealStaff: {name: "Высший посох лечения", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 6000},
-    higherFireStaff: {name: "Высший посох огня", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 6000},
-    higherVampirStaff: {name: "Высший посох вампира", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 6000},
-    higherPoisonedStaff: {name: "Высший посох яда", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 6000},
-    higherProtectionStaff: {name: "Высший посох защиты", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 6000},
-    higherTactiсStaff: {name: "Высший посох тактики", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 6000},
-    higherCharacteristictStaff: {name: "Высший посох характеристик", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 6000},
-    higherAttackStaff: {name: "Высший посох Атаки", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 6000}
+    higherMagicStaff: {name: "Высший посох магии", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 15, price: 6000},
+    higherHealStaff: {name: "Высший посох лечения", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 15, price: 6000},
+    higherFireStaff: {name: "Высший посох огня", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 15, price: 6000},
+    higherVampirStaff: {name: "Высший посох вампира", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 15, price: 6000},
+    higherPoisonedStaff: {name: "Высший посох яда", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 15, price: 6000},
+    higherProtectionStaff: {name: "Высший посох защиты", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 15, price: 6000},
+    higherTactiсStaff: {name: "Высший посох тактики", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 15, price: 6000},
+    higherCharacteristictStaff: {name: "Высший посох характеристик", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 15, price: 6000},
+    higherAttackStaff: {name: "Высший посох Атаки", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 15, price: 6000}
 }
 
 
@@ -396,5 +396,5 @@ export const artifacts = {
     lensWisdom: {name: "Линза мудрости", class: "Артефакт", effect: 1, target: "wisdom", price: 6000},
     flowerCharisma: {name: "Цветок харизмы", class: "Артефакт", effect: 1, target: "charisma", price: 6000},
     ultraGem: {name: "Ультра самоцвет", class: "Мега-артефакт", effect: 1, price: 6000},
-    tacticCrystal: {name: "Тактический кристалл", class: "Артефакт способностей", , price: 6000}
+    tacticCrystal: {name: "Тактический кристалл", class: "Артефакт характеристик", effect: 1, price: 6000}
 }

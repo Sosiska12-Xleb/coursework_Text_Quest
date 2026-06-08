@@ -14,6 +14,7 @@ export let player = {
     max_hits: 15,
     hits: 15,
     time_hits: 0,
+    speed: 1
     },
 
     inventory: {
