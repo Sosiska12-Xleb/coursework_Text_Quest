@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-import { menu } from "../src/menu/index.js"
+import { menu } from '../src/menu/index.js'
 
 menu()

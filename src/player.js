@@ -1,27 +1,27 @@
 export let player = {
 
-    characteristic: {
+  characteristic: {
     strenght: 0,
     dexterity: 0,
     physique: 0,
     intelligence: 0,
     wisdom: 0,
-    charisma: 0
-    },
+    charisma: 0,
+  },
 
-    stats: {
+  stats: {
     ac: 10,
     max_hits: 15,
     hits: 15,
     time_hits: 0,
-    speed: 1
-    },
+    speed: 1,
+  },
 
-    inventory: {
-    armors: {armor: "", shield: ""},
-    weapon: {firstWeapon: "", secondWeapon: ""},
+  inventory: {
+    armors: { armor: '', shield: '' },
+    weapon: { firstWeapon: '', secondWeapon: '' },
     storageItemsStats: [],
     storageNames: [],
-    coins: 0
-    }
+    coins: 0,
+  },
 }

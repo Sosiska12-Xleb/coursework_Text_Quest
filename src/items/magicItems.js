@@ -1,6 +1,7 @@
-import { diceRandomizer } from "../diceRandomizer"
-import { armors } from "./armor"
-import { arms } from "./arms"
+import { diceRandomizer } from "../diceRandomizer.js"
+import { armors } from "./armor.js"
+import { arms } from "./arms.js"
+import { spalls } from "./spalls.js"
 
 export const potions = {
 
@@ -56,10 +57,10 @@ export const potions = {
     pmegaPotion: {name: "Превосходное мега зелье", class: "Мега зелье", effect: 8, price: 7000},
 
 
-    resistancePotion: {name: "Зелье сопротивления", class: "Зелье активатор", target: "resistance", price: 350},
-    invulnerabilityPotion: {name: "Зелье неуязвимости", class: "Зелье активатор", target: "invulnerability", price: 1700},
-    spikePotion: {name: "Зелье шипов", class: "Зелье активатор", target: "spikes", price: 1700},
-    firePotion: {name: "Зелье атакующего пламени", class: "Зелье активатор", target: "fire attack", price: 400},
+    resistancePotion: {name: "Зелье сопротивления", class: "Зелье активатор", target: "resistance", time: 3, price: 350},
+    invulnerabilityPotion: {name: "Зелье неуязвимости", class: "Зелье активатор", target: "invulnerability", time: 3, price: 1700},
+    spikePotion: {name: "Зелье шипов", class: "Зелье активатор", target: "spikes", time: 3, price: 1700},
+    firePotion: {name: "Зелье атакующего пламени", class: "Зелье активатор", target: "fire attack", time: 3, price: 400},
 
 
     beer: {name: "Пиво", class: "Пиво", effect: 5, price: 20},
@@ -352,24 +353,24 @@ export const magicArmor = {
 
 
 export const magicstaffs = {
-    basicMagicStaff: {name: "Базовый посох магии", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
-    basicHealStaff: {name: "Базовый посох лечения", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
-    basicFireStaff: {name: "Базовый посох огня", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
-    basicVampirStaff: {name: "Базовый посох вампира", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
-    basicPoisonedStaff: {name: "Базовый посох яда", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
-    basicProtectionStaff: {name: "Базовый посох защиты", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
-    basicTactiсStaff: {name: "Базовый посох тактики", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
-    basicCharacteristictStaff: {name: "Базовый посох характеристик", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
-    basicAttackStaff: {name: "Базовый посох Атаки", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 5, price: 300},
+    basicMagicStaff: {name: "Базовый посох магии", class: "Магический посох", spalls: [spalls.electricDischarge1, spalls.magicPlates1, spalls.healingSwing1], charge: 5, price: 300},
+    basicHealStaff: {name: "Базовый посох лечения", class: "Магический посох", spalls: [spalls.electricDischarge1, spalls.healingSwing1, spalls.lifeEnhancement1], charge: 5, price: 300},
+    basicFireStaff: {name: "Базовый посох огня", class: "Магический посох", spalls: [spalls.fieryWhip1, spalls.fireStorm1], charge: 5, price: 300},
+    basicVampirStaff: {name: "Базовый посох вампира", class: "Магический посох", spalls: [spalls.bloodyBite1, spalls.witheringSwarm1], charge: 5, price: 300},
+    basicPoisonedStaff: {name: "Базовый посох яда", class: "Магический посох", spalls: [spalls.poisonousSpray1, spalls.toxicCloud1], charge: 5, price: 300},
+    basicProtectionStaff: {name: "Базовый посох защиты", class: "Магический посох", spalls: [spalls.magicalResistance, spalls.magicPlates1], charge: 5, price: 300},
+    basicTactiсStaff: {name: "Базовый посох тактики", class: "Магический посох", spalls: [spalls.tacticalBreakthrough1, spalls.electricDischarge1, spalls.magicPlates1], charge: 5, price: 300},
+    basicCharacteristictStaff: {name: "Базовый посох характеристик", class: "Магический посох", spalls: [spalls.increaseStrength1, spalls.increaseDexterity1, spalls.increasePhysique1, spalls.increaseIntelligence1, spalls.increaseWisdom1, spalls.increaseCharisma1], charge: 5, price: 300},
+    basicAttackStaff: {name: "Базовый посох Атаки", class: "Магический посох", spalls: [spalls.attackBoost1, spalls.damageBoost1], charge: 5, price: 300},
 
-    сustomizedMagicStaff: {name: "Настроенный посох магии", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
-    customizedHealStaff: {name: "Настроенный посох лечения", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
-    customizedFireStaff: {name: "Настроенный посох огня", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
-    customizedVampirStaff: {name: "Настроенный посох вампира", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
-    customizedPoisonedStaff: {name: "Настроенный посох яда", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
-    customizedProtectionStaff: {name: "Настроенный посох защиты", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
-    customizedTactiсStaff: {name: "Настроенный посох тактики", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
-    customizedCharacteristictStaff: {name: "Настроенный посох характеристик", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
+    сustomizedMagicStaff: {name: "Настроенный посох магии", class: "Магический посох", spalls: [spalls.electricDischarge2, spalls.magicPlates2, spalls.healingSwing2, spalls.massLightning1], charge: 10, price: 3000},
+    customizedHealStaff: {name: "Настроенный посох лечения", class: "Магический посох", spalls: [spalls.electricDischarge2, spalls.healingSwing2, spalls.lifeEnhancement2, spalls.magicPlates1], charge: 10, price: 3000},
+    customizedFireStaff: {name: "Настроенный посох огня", class: "Магический посох", spalls: [spalls.fieryWhip2, spalls.fireStorm2, spalls.magicPlates1], charge: 10, price: 3000},
+    customizedVampirStaff: {name: "Настроенный посох вампира", class: "Магический посох", spalls: [spalls.bloodyBite2, spalls.witheringSwarm2, spalls.attackBoost1], charge: 10, price: 3000},
+    customizedPoisonedStaff: {name: "Настроенный посох яда", class: "Магический посох", spalls: [spalls.poisonousSpray2, spalls.toxicCloud2, spalls.healingSwing1], charge: 10, price: 3000},
+    customizedProtectionStaff: {name: "Настроенный посох защиты", class: "Магический посох", spalls: [spalls.magicalResistance, spalls.magicPlates2, spalls.healingSwing1], charge: 10, price: 3000},
+    customizedTactiсStaff: {name: "Настроенный посох тактики", class: "Магический посох", spalls: [spalls.tacticalBreakthrough2, spalls.electricDischarge2, spalls.magicPlates2, spalls.damageBoost1], charge: 10, price: 3000},
+    customizedCharacteristictStaff: {name: "Настроенный посох характеристик", class: "Магический посох", spalls: [spalls.increaseStrength2, spalls.increaseDexterity2, spalls.increasePhysique2, spalls.increaseIntelligence2, spalls.increaseWisdom2, spalls.increaseCharisma2], charge: 10, price: 3000},
     customizedAttackStaff: {name: "Настроенный посох Атаки", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 10, price: 3000},
 
     higherMagicStaff: {name: "Высший посох магии", class: "Магический посох", spalls: [ПРОПИСАТЬ!!!], charge: 15, price: 6000},
