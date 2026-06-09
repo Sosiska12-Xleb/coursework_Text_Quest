@@ -17,13 +17,13 @@ export const spalls = {
   lifeEnhancement2: { name: 'Повышение жизни 2 ур.', class: 'Заклинание характеристик', effect: diceRandomizer(8), price: 2, target: 'time_hits', explanation: 'Значение временных хитов умеренно увеличивается.' },
   lifeEnhancement3: { name: 'Повышение жизни 3 ур.', class: 'Заклинание характеристик', effect: diceRandomizer(8, 2), price: 3, target: 'time_hits', explanation: 'Значение временных хитов сильно увеличивается.' },
 
-  fieryWhip1: { name: 'Огнненный хлыст 1 ур.', class: 'Огненное заклинание', effect: diceRandomizer(4), time: diceRandomizer(6), price: 1, explanation: 'Посох воссозадет огненный хлыст бьющий по выбранному существу, поджигая его.' },
-  fieryWhip2: { name: 'Огнненный хлыст 2 ур.', class: 'Огненное заклинание', effect: diceRandomizer(6), time: diceRandomizer(6), price: 2, explanation: 'Посох воссозадет огненный хлыст бьющий по выбранному существу, поджигая его.' },
-  fieryWhip3: { name: 'Огнненный хлыст 3 ур.', class: 'Огненное заклинание', effect: diceRandomizer(8), time: diceRandomizer(6), price: 3, explanation: 'Посох воссозадет огненный хлыст бьющий по выбранному существу, поджигая его.' },
+  fieryWhip1: { name: 'Огнненный хлыст 1 ур.', class: 'Огненное заклинание', effect: diceRandomizer(4, 2), time: diceRandomizer(6), price: 1, explanation: 'Посох воссозадет огненный хлыст бьющий по выбранному существу, поджигая его.' },
+  fieryWhip2: { name: 'Огнненный хлыст 2 ур.', class: 'Огненное заклинание', effect: diceRandomizer(6, 2), time: diceRandomizer(6), price: 2, explanation: 'Посох воссозадет огненный хлыст бьющий по выбранному существу, поджигая его.' },
+  fieryWhip3: { name: 'Огнненный хлыст 3 ур.', class: 'Огненное заклинание', effect: diceRandomizer(8, 2), time: diceRandomizer(6), price: 3, explanation: 'Посох воссозадет огненный хлыст бьющий по выбранному существу, поджигая его.' },
 
-  fireStorm1: { name: 'Огнненная буря 1 ур.', class: 'Огненное заклинание', subclass: 'Массовое', effect: diceRandomizer(4), time: diceRandomizer(6), price: 3, explanation: 'Из посоха высвобоьждается огненная буря, наносяшая урон всем существам в видимости.' },
-  fireStorm2: { name: 'Огнненная буря 2 ур.', class: 'Огненное заклинание', subclass: 'Массовое', effect: diceRandomizer(6), time: diceRandomizer(6), price: 4, explanation: 'Из посоха высвобоьждается огненная буря, наносяшая урон всем существам в видимости.' },
-  fireStorm3: { name: 'Огнненная буря 3 ур.', class: 'Огненное заклинание', subclass: 'Массовое', effect: diceRandomizer(8), time: diceRandomizer(6), price: 5, explanation: 'Из посоха высвобоьждается огненная буря, наносяшая урон всем существам в видимости.' },
+  fireStorm1: { name: 'Огнненная буря 1 ур.', class: 'Огненное заклинание', subclass: 'Массовое', effect: diceRandomizer(4, 2), time: diceRandomizer(6), price: 3, explanation: 'Из посоха высвобоьждается огненная буря, наносяшая урон всем существам в видимости.' },
+  fireStorm2: { name: 'Огнненная буря 2 ур.', class: 'Огненное заклинание', subclass: 'Массовое', effect: diceRandomizer(6, 2), time: diceRandomizer(6), price: 4, explanation: 'Из посоха высвобоьждается огненная буря, наносяшая урон всем существам в видимости.' },
+  fireStorm3: { name: 'Огнненная буря 3 ур.', class: 'Огненное заклинание', subclass: 'Массовое', effect: diceRandomizer(8, 2), time: diceRandomizer(6), price: 5, explanation: 'Из посоха высвобоьждается огненная буря, наносяшая урон всем существам в видимости.' },
 
   bloodyBite1: { name: 'Кровавый укус 1 ур.', class: 'Вампирское заклинание', effect: diceRandomizer(6), price: 1, explanation: 'Выбранное существо теряет свои жизненые силы, которые отдаются владельцу посоха.' },
   bloodyBite2: { name: 'Кровавый укус 2 ур.', class: 'Вампирское заклинание', effect: diceRandomizer(6, 2), price: 3, explanation: 'Выбранное существо теряет свои жизненые силы, которые отдаются владельцу посоха.' },

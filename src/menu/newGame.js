@@ -2,9 +2,33 @@ import readlineSync from 'readline-sync'
 import fs from 'fs'
 import { menu } from './index.js'
 import { player } from '../player.js'
-import { armors } from '../items/armor.js'
+import { armors, dexterityArmor, dexterityRangeChecker } from '../items/armor.js'
 import { arms } from '../items/arms.js'
 import { potions, magicstaffs, artifacts } from '../items/magicItems.js'
+
+const characteristicChecker = (characteristics) => {
+  let characteristicPoints = 11
+  if (characteristics.length !== 6) {
+    console.log('|  Некорректный ввод, напишите 6 чисел без пробелов и через запятую                                                              |')
+    return false
+  }
+
+  for (const i of characteristics) {
+    const numI = Number(i)
+    if (numI > 5 || numI < -5) {
+      console.log(`|  Некорректный ввод, значение '${numI}' выходит из диапозона (-5; 5), введите число в этом диапозоне.                                |`)
+      return false
+    }
+    characteristicPoints -= numI
+    }
+
+    if (characteristicPoints < 0) {
+      console.log(`|  Некорректный ввод, ваши значения характеристик превышают ваш баланс очков. Напоминание: у вас 11 очков, отрицательные         |`)
+      console.log(`|  значения повышают ваш баланс очков.                                                                                           |`)
+      return false
+    }
+    return true
+}
 
 const characteristicChoose = () => {
   const content = fs.readFileSync('assets/newGame_images/newGameMenu1.txt', 'utf-8')
@@ -17,29 +41,6 @@ const characteristicChoose = () => {
         return menu()
       default:
         let characteristics = action.split(',')
-        const characteristicChecker = (characteristics) => {
-          let characteristicPoints = 11
-          if (characteristics.length !== 6) {
-            console.log('|  Некорректный ввод, напишите 6 чисел без пробелов и через запятую                                                              |')
-            return false
-          }
-
-          for (const i of characteristics) {
-            const numI = Number(i)
-            if (numI > 5 || numI < -5) {
-              console.log(`|  Некорректный ввод, значение '${numI}' выходит из диапозона (-5; 5), введите число в этом диапозоне.                                |`)
-              return false
-            }
-            characteristicPoints -= numI
-          }
-
-          if (characteristicPoints < 0) {
-            console.log(`|  Некорректный ввод, ваши значения характеристик превышают ваш баланс очков. Напоминание: у вас 11 очков, отрицательные         |`)
-            console.log(`|  значения повышают ваш баланс очков.                                                                                           |`)
-            return false
-          }
-          return true
-        }
 
         const result = characteristicChecker(characteristics)
         if (result === false) {
@@ -58,9 +59,9 @@ const characteristicChoose = () => {
 }
 
 const inventoryChoose = () => {
-  const content = fs.readFileSync('assets/newGame_images/newGameMenu1.txt', 'utf-8')
+  const content = fs.readFileSync('assets/newGame_images/newGameMenu2.txt', 'utf-8')
   console.log(content)
-  action = readlineSync.question('|  Action: ')
+  const action = readlineSync.question('|  Action: ')
   switch (action) {
     case '1':
       return characteristicChoose()
@@ -70,6 +71,7 @@ const inventoryChoose = () => {
       player.inventory.weapon.firstWeapon = arms.simpleHandWeapons.baton
       player.inventory.storageItemsStats.push(potions.healingPotion, potions.healingPotion, potions.healingPotion, potions.resistancePotion)
       player.inventory.storageNames.push(potions.healingPotion.name, potions.healingPotion.name, potions.healingPotion.name, potions.resistancePotion.name)
+      break
     case '3':
       player.inventory.armors.armor = armors.lightArmor.quiltedArmor
       player.stats.ac = armors.lightArmor.quiltedArmor.ac
@@ -77,15 +79,21 @@ const inventoryChoose = () => {
       player.inventory.weapon.secondWeapon = arms.simpleRangeWeapon.sling
       player.inventory.storageItemsStats.push(potions.healingPotion, potions.healingPotion, potions.dexterityPotion)
       player.inventory.storageNames.push(potions.healingPotion.name, potions.healingPotion.name, potions.dexterityPotion.name)
+      break
     case '4':
       player.inventory.weapon.firstWeapon = magicstaffs.basicMagicStaff
       player.inventory.storageItemsStats.push(artifacts.tacticCrystal, potions.healingPotion, potions.healingPotion, potions.intelligencePotion)
       player.inventory.storageNames.push(artifacts.tacticCrystal.name, potions.healingPotion.name, potions.healingPotion.name, potions.intelligencePotion.name)
+      break
     case '5':
       player.inventory.weapon.firstWeapon = magicstaffs.basicHealStaff
       player.inventory.storageItemsStats.push(artifacts.amuletDrunkard, potions.healingPotion, potions.healingPotion, potions.healingPotion, potions.healingPotion)
       player.inventory.storageNames.push(artifacts.amuletDrunkard.name, potions.healingPotion.name, potions.healingPotion.name, potions.healingPotion.name, potions.healingPotion.name)
+      break
   }
+  return
 }
+
+const 
 
 export { characteristicChoose }

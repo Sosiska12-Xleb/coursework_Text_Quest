@@ -32,7 +32,7 @@ const menu = () => {
         clearScreen()
         return achievements()
       case '6':
-        console.log('Иницализация выхода...')
+        console.log('Инициализация выхода...')
         return
       default:
         console.log('Некорректный ввод команды, пожалуйста введите только число из меню')
