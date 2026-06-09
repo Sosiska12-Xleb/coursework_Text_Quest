@@ -2,7 +2,7 @@ import readlineSync from 'readline-sync'
 import fs from 'fs'
 import { menu } from './index.js'
 import { player } from '../player.js'
-import { armors, dexterityArmor, dexterityRangeChecker } from '../items/armor.js'
+import { armors } from '../items/armor.js'
 import { arms } from '../items/arms.js'
 import { potions, magicstaffs, artifacts } from '../items/magicItems.js'
 
@@ -16,7 +16,10 @@ const characteristicChecker = (characteristics) => {
   for (const i of characteristics) {
     const numI = Number(i)
     if (numI > 5 || numI < -5) {
-      console.log(`|  Некорректный ввод, значение '${numI}' выходит из диапозона (-5; 5), введите число в этом диапозоне.                                |`)
+      console.log(`|  Некорректный ввод, значение '${numI}' выходит из диапозона (-5; 5), введите число в этом диапозоне.                           |`)
+      return false
+    } else if (Number.isNaN(numI)) {
+      console.log("|  Некорректный ввод, введите за место сторонних символов и букв нужные вам числа.                                               |")
       return false
     }
     characteristicPoints -= numI
@@ -30,7 +33,7 @@ const characteristicChecker = (characteristics) => {
     return true
 }
 
-const characteristicChoose = () => {
+export const characteristicChoose = () => {
   const content = fs.readFileSync('assets/newGame_images/newGameMenu1.txt', 'utf-8')
   console.log(content)
   let action = ''
@@ -90,10 +93,22 @@ const inventoryChoose = () => {
       player.inventory.storageItemsStats.push(artifacts.amuletDrunkard, potions.healingPotion, potions.healingPotion, potions.healingPotion, potions.healingPotion)
       player.inventory.storageNames.push(artifacts.amuletDrunkard.name, potions.healingPotion.name, potions.healingPotion.name, potions.healingPotion.name, potions.healingPotion.name)
       break
+    default:
+      console.log("|  Некорректный ввод, выберете число из списка                                                                                   |")
+      return inventoryChoose()
   }
-  return
+ 
+  return finalPlayerChoose()
 }
 
-const 
+const finalPlayerChoose = () => {
+  const content = fs.readFileSync('assets/newGame_images/newGameMenu3.txt', 'utf-8')
+  console.log(content)
+  player.name = readlineSync.question('|  Action: ')
 
-export { characteristicChoose }
+  const content2 = fs.readFileSync('assets/newGame_images/newGameMenu4.txt', 'utf-8')
+  прописать!!! = readlineSync.question('|  Action: ')
+  console.log(content2)
+  console.log(player)
+  return //game()
+}

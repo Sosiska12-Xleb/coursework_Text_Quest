@@ -58,7 +58,7 @@ export const potions = {
     resistancePotion: {name: "Зелье сопротивления", class: "Зелье активатор", target: "resistance", price: 350, explanation: "Дает персонажу временное сопротивление от всего получаемого урона.", rerity: 6},
     invulnerabilityPotion: {name: "Зелье неуязвимости", class: "Зелье активатор", target: "invulnerability", price: 1700, explanation: "Временно делает персонажа неуязвимым для атак и негативных эффектов.", rerity: 3},
     spikePotion: {name: "Зелье шипов", class: "Зелье активатор", target: "spikes", price: 1700, explanation: "Временно дает персонажу шипы.", rerity: 4},
-    firePotion: {name: "Зелье атакующего пламени", class: "Зелье активатор", target: "fire attack", price: 400, explanation: "Временно призывает огонь вокруг, пассивно атакующий всех врагов в видимости.", rerity: 5},
+    firePotion: {name: "Зелье атакующего пламени", class: "Зелье активатор", target: "fireAttack", price: 400, explanation: "Временно призывает огонь вокруг, пассивно атакующий всех врагов в видимости.", rerity: 5},
 
     beer: {name: "Пиво", class: "Пиво", effect: 5, price: 20, explanation: "Сразу после принятия наносит 5 урона всем вражеским существам в видимости", rerity: 9},
     kvas: {name: "Квас", class: "Пиво", effect: 15, price: 55, explanation: "Сразу после принятия наносит 15 урона всем вражеским существам в видимости", rerity: 7},
@@ -371,7 +371,7 @@ export const magicstaffs = {
 
 export const artifacts = {
     protectionRing: {name: "Кольцо защиты", class: "Артефакт", effect: 1, target: "ac", price: 900, explanation: "Дает небольшую защиту при ношении.", rerity: 7},
-    amuletDrunkard: {name: "Амулет пьяницы", class: "Артефакт способностей", target: "drunkard", price: 1800, explanation: "При ношении улучшает использование алкогольных напитков, при использовании их персонаж лечится.", rerity: 6},
+    amuletDrunkard: {name: "Амулет пьяницы", class: "Артефакт способностей", target: "drunkard", price: 1800, explanation: "При ношении улучшает использование алкогольных напитков, при использовании их персонаж лечится.", rerity: 3},
     amuletHits: {name: "Амулет здоровья", class: "Артефакт", effect: 1, target: "hits", price: 100, explanation: "Крошечный амулет, незначительно увеличивает здоровье носителя.", rerity: 9},
     handcuffStrenght: {name: "Наруч силы", class: "Артефакт", effect: 1, target: "strenght", price: 2000, explanation: "Улучшает значение силы.", rerity: 5},
     stylusDexterity: {name: "Перо ловкости", class: "Артефакт", effect: 1, target: "dexterity", price: 2000, explanation: "Улучшает значение ловкости.", rerity: 5},
