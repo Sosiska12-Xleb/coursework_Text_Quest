@@ -6,7 +6,7 @@ export const arms = {
     mace: { name: 'Булова', class: 'Оружие', price: 1, damage: diceRandomizer(6), property: [], rerity: 10 },
     baton: { name: 'Дубинка', class: 'Оружие', price: 1, damage: diceRandomizer(4), property: ['Легкое'], rerity: 10 },
     knife: { name: 'Кинжал', class: 'Оружие', price: 1, damage: diceRandomizer(4), property: ['Легкое', 'Метательное', 'Фехтовальное'], rerity: 8 },
-    spear: { name: 'Копьё', class: 'Оружие', price: 3, damage: diceRandomizer(6), property: [8, 'Метательное'], rerity: 8 },
+    spear: { name: 'Копьё', class: 'Оружие', price: 3, damage: diceRandomizer(8), property: ['Метательное'], rerity: 8 },
     lightHammer: { name: 'Лёгкий молот', class: 'Оружие', price: 2, damage: diceRandomizer(4), property: ['Легкое', 'Метательное'], rerity: 9 },
     propellantSpear: { name: 'Метательное копьё', class: 'Оружие', price: 1, damage: diceRandomizer(6), property: ['Метательное'], rerity: 9 },
     club: { name: 'Палица', class: 'Оружие', price: 2, damage: diceRandomizer(8), property: ['Двуручное'], rerity: 8 },

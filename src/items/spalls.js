@@ -1,9 +1,9 @@
 import { diceRandomizer } from '../diceRandomizer.js'
 
 export const spalls = {
-  electricDischarge1: { name: 'Электроразряд 1 ур.', class: 'Атакующее заклинание', effect: diceRandomizer(6), price: 1, explanation: 'Посох выпускает слабый электрический заряд наносящий урон.' },
-  electricDischarge2: { name: 'Электроразряд 2 ур.', class: 'Атакующее заклинание', effect: diceRandomizer(6, 2), price: 1, explanation: 'Посох выпускает сильный электрический заряд наносящий урон.' },
-  electricDischarge3: { name: 'Электроразряд 3 ур.', class: 'Атакующее заклинание', effect: diceRandomizer(6, 3), price: 2, explanation: 'Посох выпускает мощьный электрический заряд наносящий урон.' },
+  electricDischarge1: { name: 'Электроразряд 1 ур.', class: 'Атакующее заклинание', effect: diceRandomizer(8), price: 1, explanation: 'Посох выпускает слабый электрический заряд наносящий урон.' },
+  electricDischarge2: { name: 'Электроразряд 2 ур.', class: 'Атакующее заклинание', effect: diceRandomizer(8, 2), price: 1, explanation: 'Посох выпускает сильный электрический заряд наносящий урон.' },
+  electricDischarge3: { name: 'Электроразряд 3 ур.', class: 'Атакующее заклинание', effect: diceRandomizer(8, 3), price: 2, explanation: 'Посох выпускает мощьный электрический заряд наносящий урон.' },
 
   magicPlates1: { name: 'Магические пластиный 1 ур.', class: 'Заклинание характеристик', effect: 1, target: 'ac', price: 2, explanation: 'Посох воссоздает вокруг себя слабую магическую защиту, повышающий защиту существа.' },
   magicPlates2: { name: 'Магические пластиный 2 ур.', class: 'Заклинание характеристик', effect: 2, target: 'ac', price: 2, explanation: 'Посох воссоздает вокруг себя хорошую магическую защиту, повышающий защиту существа.' },

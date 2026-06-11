@@ -22,7 +22,6 @@ export let player = {
     armors: { armor: '', shield: '' },
     weapon: { firstWeapon: '', secondWeapon: '' },
     storageItemsStats: [],
-    storageNames: [],
     coins: 0,
   },
 

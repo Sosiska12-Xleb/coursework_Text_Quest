@@ -4,7 +4,7 @@ import { about } from './about.js'
 import { achievements } from './achievements.js'
 import { characteristicChoose } from './newGame.js'
 
-function clearScreen() {
+export function clearScreen() {
   process.stdout.write('\u001B[2J\u001B[0f')
 }
 

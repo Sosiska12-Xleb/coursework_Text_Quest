@@ -372,7 +372,7 @@ export const magicstaffs = {
 export const artifacts = {
     protectionRing: {name: "Кольцо защиты", class: "Артефакт", effect: 1, target: "ac", price: 900, explanation: "Дает небольшую защиту при ношении.", rerity: 7},
     amuletDrunkard: {name: "Амулет пьяницы", class: "Артефакт способностей", target: "drunkard", price: 1800, explanation: "При ношении улучшает использование алкогольных напитков, при использовании их персонаж лечится.", rerity: 3},
-    amuletHits: {name: "Амулет здоровья", class: "Артефакт", effect: 1, target: "hits", price: 100, explanation: "Крошечный амулет, незначительно увеличивает здоровье носителя.", rerity: 9},
+    amuletHits: {name: "Амулет здоровья", class: "Артефакт", effect: 4, target: "hits", price: 100, explanation: "Крошечный амулет, незначительно увеличивает здоровье носителя.", rerity: 9},
     handcuffStrenght: {name: "Наруч силы", class: "Артефакт", effect: 1, target: "strenght", price: 2000, explanation: "Улучшает значение силы.", rerity: 5},
     stylusDexterity: {name: "Перо ловкости", class: "Артефакт", effect: 1, target: "dexterity", price: 2000, explanation: "Улучшает значение ловкости.", rerity: 5},
     stonePhysique: {name: "Камень выносливости", class: "Артефакт", effect: 1, target: "physique", price: 2000, explanation: "Улучшает значение телосложения.", rerity: 5},
