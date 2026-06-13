@@ -1,31 +1,33 @@
+// данные игрока (состояние персонажа)
 export let player = {
-  name: "",
+  name: "", // имя персонажа
   characteristic: {
-    strenght: 0,
-    dexterity: 0,
-    physique: 0,
-    intelligence: 0,
-    wisdom: 0,
-    charisma: 0,
+    strenght: 0,    // сила (влияет на ближний бой)
+    dexterity: 0,   // ловкость (влияет на дальний бой и скрытность)
+    physique: 0,    // телосложение (влияет на здоровье)
+    intelligence: 0, // интеллект (влияет на магию)
+    wisdom: 0,      // мудрость (влияет на магию)
+    charisma: 0,    // харизма (влияет на лечение)
   },
 
   stats: {
-    ac: 10,
-    max_hits: 15,
-    hits: 15,
-    time_hits: 0,
-    speed: 1,
-    drunkard: false,
-    stealth: true,
+    ac: 10,           // класс брони (защита)
+    max_hits: 15,     // максимальное здоровье
+    hits: 15,         // текущее здоровье
+    time_hits: 0,     // временные хиты (дополнительная защита)
+    speed: 1,         // скорость передвижения
+    drunkard: false,  // способность пьяницы
+    stealth: true,    // возможность скрыться
   },
 
   inventory: {
-    armors: { armor: '', shield: '' },
-    weapon: { firstWeapon: '', secondWeapon: '' },
-    storageItemsStats: [],
-    coins: 0,
+    armors: { armor: '', shield: '' }, // экипированная броня и щит
+    weapon: { firstWeapon: '', secondWeapon: '' }, // оружие в двух слотах
+    storageItemsStats: [], // предметы в инвентаре
+    coins: 0, // монеты
   },
 
+  // временные эффекты на время боя
   timeEffects: {
     timeStrenght: 0,
     timeDexterity: 0,
@@ -37,17 +39,19 @@ export let player = {
     timeSpeed: 0,
     timeAc: 0,
 
-    timeAttack: 0,
-    timeDamage: 0,
-    timeDiceX: 1,
+    timeAttack: 0,   // бонус к атаке
+    timeDamage: 0,   // бонус к урону
+    timeDiceX: 1,    // множитель кубов урона
   },
+  
+  // долговременные эффекты
   otherTimeEffects: {
-      resistance: false,
-      invulnerability: false,
-      spikes: false,
-      fireAttack: false,
-      time: 0,
-      fire: 0,
-      acid: 0
+      resistance: false,     // сопротивление урону
+      invulnerability: false, // неуязвимость
+      spikes: false,         // шипы (контратака)
+      fireAttack: false,     // огненная аура
+      time: 0,               // длительность эффектов
+      fire: 0,               // урон от огня
+      acid: 0                // урон от кислоты
   }
 }

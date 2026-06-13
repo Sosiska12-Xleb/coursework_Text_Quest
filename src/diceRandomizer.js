@@ -1,11 +1,14 @@
+// функция генерации случайных чисел (броски кубиков)
 export const diceRandomizer = (num, quantity = 0) => {
-  if (quantity === 0) {
-    return Math.floor(Math.random() * num) + 1
-  }
+    // если количество не указано или равно 1 - один бросок
+    if (quantity === 0 || quantity === 1) {
+        return Math.floor(Math.random() * num) + 1
+    }
 
-  let result = 0
-  for (const i in quantity) {
-    result += Math.floor(Math.random() * num) + 1
-  }
-  return result
+    // множественные броски (суммирование результатов)
+    let result = 0
+    for (let i = 0; i < quantity; i++) {
+        result += Math.floor(Math.random() * num) + 1
+    }
+    return result
 }

@@ -1,3 +1,4 @@
+// файл боевой системы
 import readlineSync from 'readline-sync'
 import fs from 'fs'
 import { diceRandomizer } from "../diceRandomizer.js"
@@ -5,31 +6,18 @@ import { player } from "./player.js"
 
 let enemiesList = []
 
+// начало битвы
 export const battleBegin = (enemies) => {
     enemiesList = []
     
+    // отображение случайной картинки битвы
     const battlePicture = diceRandomizer(6)
-    switch(battlePicture) {
-        case 1:
-            console.log(fs.readFileSync('assets/battles/battlePic1.txt', 'utf-8'))
-            break
-        case 2:
-            console.log(fs.readFileSync('assets/battles/battlePic2.txt', 'utf-8'))
-            break
-        case 3:
-            console.log(fs.readFileSync('assets/battles/battlePic3.txt', 'utf-8'))
-            break
-        case 4:
-            console.log(fs.readFileSync('assets/battles/battlePic4.txt', 'utf-8'))
-            break
-        case 5:
-            console.log(fs.readFileSync('assets/battles/battlePic5.txt', 'utf-8'))
-            break
-        case 6:
-            console.log(fs.readFileSync('assets/battles/battlePic6.txt', 'utf-8'))
-            break
+    const battlePicPath = `assets/battles/battlePic${battlePicture}.txt`
+    if (fs.existsSync(battlePicPath)) {
+        console.log(fs.readFileSync(battlePicPath, 'utf-8'))
     }
     
+    // добавление врагов с описанием появления
     for (const i of enemies) {
         const spawnText = diceRandomizer(6)
         switch(spawnText) {
@@ -52,33 +40,47 @@ export const battleBegin = (enemies) => {
                 console.log(`* ${i.name} случайно попал в сражение!`)
                 break
         }
-        enemiesList.push(i)
+        // копирование врага, чтобы не изменять оригинал
+        const enemyCopy = JSON.parse(JSON.stringify(i))
+        enemiesList.push(enemyCopy)
     }
     
+    // установка дистанции для каждого врага
     for (const i of enemiesList) {
         i.distance = diceRandomizer(6)
     }
     return playerTurn()
 }
 
-
+// ход игрока
 const playerTurn = () => {
+    // расчёт урона от эффектов
+    let totalDamage = player.otherTimeEffects.acid + player.otherTimeEffects.fire
+    
     if (player.stats.time_hits > 0) {
-        player.stats.time_hits -= player.otherTimeEffects.acid - player.otherTimeEffects.fire
-        if (player.stats.time_hits < 0) {
-            player.stats.hits -= player.stats.time_hits
+        if (player.stats.time_hits >= totalDamage) {
+            player.stats.time_hits -= totalDamage
+        } else {
+            const remainingDamage = totalDamage - player.stats.time_hits
             player.stats.time_hits = 0
+            player.stats.hits -= remainingDamage
         }
     } else {
-        player.stats.hits -= player.otherTimeEffects.acid - player.otherTimeEffects.fire
+        player.stats.hits -= totalDamage
     }
-    player.otherTimeEffects.time -= 1
+    
+    // уменьшение длительности эффектов
+    if (player.otherTimeEffects.time > 0) {
+        player.otherTimeEffects.time -= 1
+    }
+    
+    // проверка смерти
     if (player.stats.hits <= 0) {
         console.log(`|  Вы чувствуете сильную боль и падаете без сознания... Вы умерли.                                                               |`)
         return final('Поражение')
     }
 
-
+    // отображение интерфейса боя
     console.log("▪───────────────────────────────────────────────────────────────⚔︎───────────────────────────────────────────────────────────────▪")
     console.log(`|                                                               |                                                                 |`)
     console.log(`|  ᛝ [Имя]: ${player.name}                                             |  1: 🗡 Битва                                                    |`)
@@ -88,6 +90,7 @@ const playerTurn = () => {
     console.log(`|  ⛊ [КД]: ${player.stats.ac}                                                  |                                                                 |`)
     console.log(`|  ⚡︎ [Скорость]: ${player.stats.speed}                                              | * Выберете желаемое число для действия.                       |`)
     console.log("|                                                               |                                                                |/")
+    
     let action = readlineSync.question('|  Action: ')
     switch(action) {
         case "1":
@@ -95,7 +98,7 @@ const playerTurn = () => {
         case "2":
             return itemsUse()
         case "3":
-            return stelthTry()
+            return stealthTry()
         case "4":
             return move()
         default:
@@ -104,11 +107,13 @@ const playerTurn = () => {
     }
 }
 
+// выбор оружия для атаки
 const playerAttack = () => {
     let firstWeaponStatus = false
     let secondWeaponStatus = false
     console.log("|  * Выберете оружие из списка для атаки (Введите 3 чтобы вернуться):                                                            |/")
     console.log("|                                                                                                                                |")
+    
     if (player.inventory.weapon.firstWeapon !== '') {
         firstWeaponStatus = true
         console.log(`|  1. ${player.inventory.weapon.firstWeapon.name}.`)
@@ -117,6 +122,7 @@ const playerAttack = () => {
         console.log("|  1. Оружие в первом слоте отсутствует.                                                                                         |")
         console.log("|                                                                                                                                |")
     }
+    
     if (player.inventory.weapon.secondWeapon !== '') {
         secondWeaponStatus = true
         console.log(`|  2. ${player.inventory.weapon.secondWeapon.name}.`)
@@ -126,7 +132,6 @@ const playerAttack = () => {
         console.log("|                                                                                                                                |")
     }
 
-    
     let action = readlineSync.question('|  Action: ')
     switch(action) {
         case "1":
@@ -145,14 +150,21 @@ const playerAttack = () => {
                 console.log("|  У вас нет оружия во втором слоте выберете другое.                                                                              |")
             }
             break
+        case "3":
+            return playerTurn()
+        default:
+            console.log("|  Некорректный ввод.                                                                                   |")
+            return playerAttack()
     }
 }
 
+// основная функция атаки
 const attack = (weapon) => {
     if (!weapon || !weapon.class) {
         console.log("|  Ошибка: оружие не выбрано!                                                                                              |")
         return playerAttack()
     }
+    
     console.log("|  * Выберете врага, которого вы хотите атаковать(Введите 6 чтобы вернуться):                                                    |")
     console.log("|                                                                                                                                |")
     let enemyNum = 0
@@ -174,25 +186,36 @@ const attack = (weapon) => {
         return attack(weapon)
     }
 
-
     let attackResult = 0
     let damageResult = 0
-    const properties = weapon.stats.property || []
-
+    
+    // определение свойств оружия (для обычного и магического оружия)
+    let weaponStats = weapon
+    let weaponDamage = weapon.damage || 0
+    let weaponProperty = weapon.property || []
+    
+    // если оружие имеет stats (магическое оружие)
+    if (weapon.stats) {
+        weaponStats = weapon.stats
+        weaponDamage = weaponStats.damage || 0
+        weaponProperty = weaponStats.property || []
+    }
+    
+    // расчёт атаки и урона в зависимости от класса оружия
     switch(weapon.class) {
         case 'Оружие': 
-            if (enemiesList[targetEnemyIndex].distance > 1 && ((weapon.stats.property.includes('Досягаемость') === false) || enemiesList[targetEnemyIndex].distance > 2)) {
+            if (enemiesList[targetEnemyIndex].distance > 1 && (!weaponProperty.includes('Досягаемость') || enemiesList[targetEnemyIndex].distance > 2)) {
                 console.log("| Вы махаете оружием в воздухе... похоже вы не по кому не попали.")
                 return enemiesTurn()
             } else {
-                if (properties.includes('Легкое')) {
-                    damageResult += weapon.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage
+                if (weaponProperty.includes('Легкое')) {
+                    damageResult += weaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage
                 }
-                if (weapon.property.includes('Фехтовальное')) {
-                    damageResult += weapon.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+                if (weaponProperty.includes('Фехтовальное')) {
+                    damageResult += weaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
                     attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity
                 } else {
-                    damageResult += weapon.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.strenght + player.timeEffects.timeStrenght
+                    damageResult += weaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.strenght + player.timeEffects.timeStrenght
                     attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.strenght
                 }
             }
@@ -203,192 +226,191 @@ const attack = (weapon) => {
                 console.log("|  Вы попытались выстрелить во врага перед собой и промахнулись, может если отойти от него результат будет лучше?                |")
                 return enemiesTurn()
             } else {
-                if (properties.includes('Легкое')) {
-                    damageResult += weapon.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity
+                if (weaponProperty.includes('Легкое')) {
+                    damageResult += weaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity
                 }
-                damageResult += weapon.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+                damageResult += weaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
                 attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity  
             }
             break
 
         case 'Вампирское':
-            switch(weapon.stats.class) {
-                case 'Оружие': 
-                    if (enemiesList[targetEnemyIndex].distance > 1 && ((weapon.stats.property.includes('Досягаемость') === false) || enemiesList[targetEnemyIndex].distance > 2)) {
-                        console.log("| Вы махаете оружием в воздухе... похоже вы не по кому не попали.")
-                        return enemiesTurn()
-                    } else {
-                        if (properties.includes('Легкое')) {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage
-                            player.stats.hits += weapon.effect
-                            if (player.stats.hits > player.stats.max_hits) {
-                                player.stats.hits = player.stats.max_hits
-                            }
-                        }
-                        if (weapon.stats.property.includes('Фехтовальное')) {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
-                            player.stats.hits += weapon.effect
-                            if (player.stats.hits > player.stats.max_hits) {
-                                player.stats.hits = player.stats.max_hits
-                            }
-                            attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity
-                        } else {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.strenght + player.timeEffects.timeStrenght
-                            player.stats.hits += weapon.effect
-                            if (player.stats.hits > player.stats.max_hits) {
-                                player.stats.hits = player.stats.max_hits
-                            }
-                            attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity
-                        }
-                    }
-                    break
-                
-                case 'Дальнобойное оружие':
-                    if (enemiesList[targetEnemyIndex].distance === 1) {
-                        console.log("|  Вы попытались выстрелить во врага перед собой и промахнулись, может если отойти от него результат будет лучше?                |")
-                        return enemiesTurn()
-                    } else {
-                        if (properties.includes('Легкое')) {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity
-                            player.stats.hits += weapon.effect
-                            if (player.stats.hits > player.stats.max_hits) {
-                                player.stats.hits = player.stats.max_hits
-                            }
-                        }
-                        damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+            const vampWeaponStats = weapon.stats || weapon
+            const vampWeaponDamage = vampWeaponStats.damage || 0
+            const vampWeaponProperty = vampWeaponStats.property || []
+            
+            if (vampWeaponStats.class === 'Оружие') {
+                if (enemiesList[targetEnemyIndex].distance > 1 && (!vampWeaponProperty.includes('Досягаемость') || enemiesList[targetEnemyIndex].distance > 2)) {
+                    console.log("| Вы махаете оружием в воздухе... похоже вы не по кому не попали.")
+                    return enemiesTurn()
+                } else {
+                    if (vampWeaponProperty.includes('Легкое')) {
+                        damageResult += vampWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage
                         player.stats.hits += weapon.effect
                         if (player.stats.hits > player.stats.max_hits) {
                             player.stats.hits = player.stats.max_hits
                         }
-                        attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity    
                     }
-                    break 
+                    if (vampWeaponProperty.includes('Фехтовальное')) {
+                        damageResult += vampWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+                        player.stats.hits += weapon.effect
+                        if (player.stats.hits > player.stats.max_hits) {
+                            player.stats.hits = player.stats.max_hits
+                        }
+                        attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity
+                    } else {
+                        damageResult += vampWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.strenght + player.timeEffects.timeStrenght
+                        player.stats.hits += weapon.effect
+                        if (player.stats.hits > player.stats.max_hits) {
+                            player.stats.hits = player.stats.max_hits
+                        }
+                        attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.strenght
+                    }
+                }
+            } else if (vampWeaponStats.class === 'Дальнобойное оружие') {
+                if (enemiesList[targetEnemyIndex].distance === 1) {
+                    console.log("|  Вы попытались выстрелить во врага перед собой и промахнулись, может если отойти от него результат будет лучше?                |")
+                    return enemiesTurn()
+                } else {
+                    if (vampWeaponProperty.includes('Легкое')) {
+                        damageResult += vampWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity
+                        player.stats.hits += weapon.effect
+                        if (player.stats.hits > player.stats.max_hits) {
+                            player.stats.hits = player.stats.max_hits
+                        }
+                    }
+                    damageResult += vampWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+                    player.stats.hits += weapon.effect
+                    if (player.stats.hits > player.stats.max_hits) {
+                        player.stats.hits = player.stats.max_hits
+                    }
+                    attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity    
+                }
             }
             break
             
         case 'Огненное':
-            switch(weapon.stats.class) {
-                case 'Оружие': 
-                    if (enemiesList[targetEnemyIndex].distance > 1 && ((weapon.stats.property.includes('Досягаемость') === false) || enemiesList[targetEnemyIndex].distance > 2)) {
-                        console.log("| Вы махаете оружием в воздухе... похоже вы не по кому не попали.")
-                        return enemiesTurn()
-                    } else {
-                        if (properties.includes('Легкое')) {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage
-                            enemiesList[targetEnemyIndex].timeEffects.fire += weapon.effect
-                            enemiesList[targetEnemyIndex].timeEffects.time += weapon.time
-                        }
-                        if (weapon.stats.property.includes('Фехтовальное')) {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
-                            enemiesList[targetEnemyIndex].timeEffects.fire += weapon.effect
-                            enemiesList[targetEnemyIndex].timeEffects.time += weapon.time
-                            attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity
-                        } else {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.strenght + player.timeEffects.timeStrenght
-                            enemiesList[targetEnemyIndex].timeEffects.fire += weapon.effect
-                            enemiesList[targetEnemyIndex].timeEffects.time += weapon.time
-                            attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity
-                        }
-                    }
-                    break
-                    
-                case 'Дальнобойное оружие':
-                    if (enemiesList[targetEnemyIndex].distance === 1) {
-                        console.log("|  Вы попытались выстрелить во врага перед собой и промахнулись, может если отойти от него результат будет лучше?                |")
-                        return enemiesTurn()
-                    } else {
-                        if (properties.includes('Легкое')) {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity
-                            enemiesList[targetEnemyIndex].timeEffects.fire += weapon.effect
-                            enemiesList[targetEnemyIndex].timeEffects.time += weapon.time
-                        }
-                        damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+            const fireWeaponStats = weapon.stats || weapon
+            const fireWeaponDamage = fireWeaponStats.damage || 0
+            const fireWeaponProperty = fireWeaponStats.property || []
+            
+            if (fireWeaponStats.class === 'Оружие') {
+                if (enemiesList[targetEnemyIndex].distance > 1 && (!fireWeaponProperty.includes('Досягаемость') || enemiesList[targetEnemyIndex].distance > 2)) {
+                    console.log("| Вы махаете оружием в воздухе... похоже вы не по кому не попали.")
+                    return enemiesTurn()
+                } else {
+                    if (fireWeaponProperty.includes('Легкое')) {
+                        damageResult += fireWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage
                         enemiesList[targetEnemyIndex].timeEffects.fire += weapon.effect
                         enemiesList[targetEnemyIndex].timeEffects.time += weapon.time
-                        attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity    
                     }
-                    break
+                    if (fireWeaponProperty.includes('Фехтовальное')) {
+                        damageResult += fireWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+                        enemiesList[targetEnemyIndex].timeEffects.fire += weapon.effect
+                        enemiesList[targetEnemyIndex].timeEffects.time += weapon.time
+                        attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity
+                    } else {
+                        damageResult += fireWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.strenght + player.timeEffects.timeStrenght
+                        enemiesList[targetEnemyIndex].timeEffects.fire += weapon.effect
+                        enemiesList[targetEnemyIndex].timeEffects.time += weapon.time
+                        attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.strenght
+                    }
+                }
+            } else if (fireWeaponStats.class === 'Дальнобойное оружие') {
+                if (enemiesList[targetEnemyIndex].distance === 1) {
+                    console.log("|  Вы попытались выстрелить во врага перед собой и промахнулись, может если отойти от него результат будет лучше?                |")
+                    return enemiesTurn()
+                } else {
+                    if (fireWeaponProperty.includes('Легкое')) {
+                        damageResult += fireWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity
+                        enemiesList[targetEnemyIndex].timeEffects.fire += weapon.effect
+                        enemiesList[targetEnemyIndex].timeEffects.time += weapon.time
+                    }
+                    damageResult += fireWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+                    enemiesList[targetEnemyIndex].timeEffects.fire += weapon.effect
+                    enemiesList[targetEnemyIndex].timeEffects.time += weapon.time
+                    attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity    
+                }
             }
             break
 
         case 'Отравленное':
-            switch(weapon.stats.class) {
-                case 'Оружие': 
-                    if (enemiesList[targetEnemyIndex].distance > 1 && ((weapon.stats.property.includes('Досягаемость') === false) || enemiesList[targetEnemyIndex].distance > 2)) {
-                        console.log("| Вы махаете оружием в воздухе... похоже вы не по кому не попали.")
-                        return enemiesTurn()
-                    } else {
-                        if (properties.includes('Легкое')) {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage
-                            enemiesList[targetEnemyIndex].timeEffects.acid += weapon.effect
-
-                        }
-                        if (weapon.stats.property.includes('Фехтовальное')) {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
-                            enemiesList[targetEnemyIndex].timeEffects.acid += weapon.effect
-                            attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity
-                        } else {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.strenght + player.timeEffects.timeStrenght
-                            enemiesList[targetEnemyIndex].timeEffects.acid += weapon.effect
-                            attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity
-                        }
-                    }
-                    break
-                    
-                case 'Дальнобойное оружие':
-                    if (enemiesList[targetEnemyIndex].distance === 1) {
-                        console.log("|  Вы попытались выстрелить во врага перед собой и промахнулись, может если отойти от него результат будет лучше?                |")
-                        return enemiesTurn()
-                    } else {
-                        if (properties.includes('Легкое')) {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity
-                            enemiesList[targetEnemyIndex].timeEffects.acid += weapon.effect
-                        }
-                        damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+            const poisonWeaponStats = weapon.stats || weapon
+            const poisonWeaponDamage = poisonWeaponStats.damage || 0
+            const poisonWeaponProperty = poisonWeaponStats.property || []
+            
+            if (poisonWeaponStats.class === 'Оружие') {
+                if (enemiesList[targetEnemyIndex].distance > 1 && (!poisonWeaponProperty.includes('Досягаемость') || enemiesList[targetEnemyIndex].distance > 2)) {
+                    console.log("| Вы махаете оружием в воздухе... похоже вы не по кому не попали.")
+                    return enemiesTurn()
+                } else {
+                    if (poisonWeaponProperty.includes('Легкое')) {
+                        damageResult += poisonWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage
                         enemiesList[targetEnemyIndex].timeEffects.acid += weapon.effect
-                        attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity    
                     }
-                    break
+                    if (poisonWeaponProperty.includes('Фехтовальное')) {
+                        damageResult += poisonWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+                        enemiesList[targetEnemyIndex].timeEffects.acid += weapon.effect
+                        attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity
+                    } else {
+                        damageResult += poisonWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.strenght + player.timeEffects.timeStrenght
+                        enemiesList[targetEnemyIndex].timeEffects.acid += weapon.effect
+                        attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.strenght
+                    }
+                }
+            } else if (poisonWeaponStats.class === 'Дальнобойное оружие') {
+                if (enemiesList[targetEnemyIndex].distance === 1) {
+                    console.log("|  Вы попытались выстрелить во врага перед собой и промахнулись, может если отойти от него результат будет лучше?                |")
+                    return enemiesTurn()
+                } else {
+                    if (poisonWeaponProperty.includes('Легкое')) {
+                        damageResult += poisonWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity
+                        enemiesList[targetEnemyIndex].timeEffects.acid += weapon.effect
+                    }
+                    damageResult += poisonWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+                    enemiesList[targetEnemyIndex].timeEffects.acid += weapon.effect
+                    attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity    
+                }
             }
             break
         
         case 'Тактическое':
-            switch(weapon.stats.class) {
-                case 'Оружие': 
-                    if (enemiesList[targetEnemyIndex].distance > 1 && ((weapon.stats.property.includes('Досягаемость') === false) || enemiesList[targetEnemyIndex].distance > 2)) {
-                        console.log("| Вы махаете оружием в воздухе... похоже вы не по кому не попали.")
-                        return enemiesTurn()
-                    } else {
-                        if (properties.includes('Легкое')) {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage
-                            player.timeEffects.timeSpeed += weapon.effect
-                        }
-                        if (weapon.stats.property.includes('Фехтовальное')) {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
-                            player.timeEffects.timeSpeed += weapon.effect
-                            attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity
-                        } else {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.strenght + player.timeEffects.timeStrenght
-                            player.timeEffects.timeSpeed += weapon.effect
-                            attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity
-                        }
-                    }
-                    break
-                    
-                case 'Дальнобойное оружие':
-                    if (enemiesList[targetEnemyIndex].distance === 1) {
-                        console.log("|  Вы попытались выстрелить во врага перед собой и промахнулись, может если отойти от него результат будет лучше?                |")
-                        return enemiesTurn()
-                    } else {
-                        if (properties.includes('Легкое')) {
-                            damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity
-                            player.timeEffects.timeSpeed += weapon.effect
-                        }
-                        damageResult += weapon.stats.damage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+            const tacticWeaponStats = weapon.stats || weapon
+            const tacticWeaponDamage = tacticWeaponStats.damage || 0
+            const tacticWeaponProperty = tacticWeaponStats.property || []
+            
+            if (tacticWeaponStats.class === 'Оружие') {
+                if (enemiesList[targetEnemyIndex].distance > 1 && (!tacticWeaponProperty.includes('Досягаемость') || enemiesList[targetEnemyIndex].distance > 2)) {
+                    console.log("| Вы махаете оружием в воздухе... похоже вы не по кому не попали.")
+                    return enemiesTurn()
+                } else {
+                    if (tacticWeaponProperty.includes('Легкое')) {
+                        damageResult += tacticWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage
                         player.timeEffects.timeSpeed += weapon.effect
-                        attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity    
                     }
-                    break
+                    if (tacticWeaponProperty.includes('Фехтовальное')) {
+                        damageResult += tacticWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+                        player.timeEffects.timeSpeed += weapon.effect
+                        attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity
+                    } else {
+                        damageResult += tacticWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.strenght + player.timeEffects.timeStrenght
+                        player.timeEffects.timeSpeed += weapon.effect
+                        attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.strenght
+                    }
+                }
+            } else if (tacticWeaponStats.class === 'Дальнобойное оружие') {
+                if (enemiesList[targetEnemyIndex].distance === 1) {
+                    console.log("|  Вы попытались выстрелить во врага перед собой и промахнулись, может если отойти от него результат будет лучше?                |")
+                    return enemiesTurn()
+                } else {
+                    if (tacticWeaponProperty.includes('Легкое')) {
+                        damageResult += tacticWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity
+                        player.timeEffects.timeSpeed += weapon.effect
+                    }
+                    damageResult += tacticWeaponDamage * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + player.characteristic.dexterity + player.timeEffects.timeDexterity
+                    player.timeEffects.timeSpeed += weapon.effect
+                    attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + player.characteristic.dexterity    
+                }
             }
             break
 
@@ -405,13 +427,13 @@ const attack = (weapon) => {
             spellNum = 1
             const spellAction = readlineSync.question('|  Action: ')
             const numSpellAction = parseInt(spellAction)
-            if (1 < numSpellAction && numSpellAction <= weapon.spalls.length) {
+            if (1 < numSpellAction && numSpellAction <= weapon.spalls.length + 1) {
                 const spelll = weapon.spalls[numSpellAction - 2]
                 if (spelll.price > weapon.charge) {
                     console.log("|  У вас недостаточно заряда на посохе                                                                                           |")
-                    return attack()
+                    return attack(weapon)
                 }
-                switch( weapon.spalls[numSpellAction - 2].class) {
+                switch(weapon.spalls[numSpellAction - 2].class) {
                     case 'Атакующее заклинание':
                         attackResult += diceRandomizer(20) + player.timeEffects.timeAttack + weapon.baseCharacteristic + player.timeEffects.timeIntelligence
                         damageResult += spelll.effect * player.timeEffects.timeDiceX + player.timeEffects.timeDamage + weapon.baseCharacteristic + player.timeEffects.timeIntelligence
@@ -486,138 +508,145 @@ const attack = (weapon) => {
             break
     }
     
-    if (attackResult > enemiesList[targetEnemyIndex].ac) {
-        console.log('|  Вы не сумели нанести урон цели.                                                                                               |')
-    } else {
+    // проверка попадания и нанесение урона
+    if (attackResult >= enemiesList[targetEnemyIndex].ac) {
         enemiesList[targetEnemyIndex].hits -= damageResult
         if (enemiesList[targetEnemyIndex].hits <= 0) {
-            enemiesList.splice(targetEnemyIndex)
+            enemiesList.splice(targetEnemyIndex, 1)
             console.log("|  Цель побежденна!                                                                                                              |")
         }
+    } else {
+        console.log('|  Вы не сумели нанести урон цели.                                                                                               |')
     }
     return enemiesTurn()
 }
 
+// использование предметов в бою
 const itemsUse = () => {
     if (player.inventory.storageItemsStats.length === 0) {
-            return "|  У вас нет вещей в инвентаре.                                                                                   |"
-        }
-        console.log("|  Список ваших вещей:                                                                                                           |")
-        let num = 1
-        for (let i = 0; i < player.inventory.storageItemsStats.length; i += 1) {
-            const item = player.inventory.storageItemsStats[i]
-            num += 1
-            console.log(`|  ${orderNum}. ${item.name} (Описание: ${item.explanation})`)
-        }
-        console.log("|  Введите номер вещи, которую вы хотите использовать. Для выхода введите 1.                                                     |")
-        const action = readlineSync.question('Action: ')
-        const numAction = parseInt(action)
-        
-        if (numAction >= 2 && numAction <= prices.length + 1) {
-            const item = player.inventory.storageItemsStats[numAction - 2]
-            switch(item.class) {
-                case 'Зелье характеристик':
-                    switch(item.target) {
-                        case 'hits':
-                            player.stats.hits += item.effect
-                            if (player.stats.hits > player.stats.max_hits) {
-                                player.stats.hits = player.stats.max_hits
-                            }
-                            break
-                        case 'time_hits':
-                            player.stats.time_hits += item.effect
-                            break
-                        case 'ac':
-                            player.timeEffects.timeAc += item.effect
-                            break
-                        case 'strengh':
-                            player.timeEffects.timeStrenght += item.effect
-                            break
-                        case 'dexterity':
-                            player.timeEffects.timeDexterity += item.effect
-                            break
-                        case 'physique':
-                            player.timeEffects.timePhysique += item.effect
-                            break
-                        case 'intelligence':
-                            player.timeEffects.timeIntelligence += item.effect
-                            break
-                        case 'wisdom':
-                            player.timeEffects.timeWisdom += item.effect
-                            break
-                        case 'charisma':
-                            player.timeEffects.timeCharisma += item.effect
-                            break
-                    }
-                    player.inventory.storageItemsStats.splice(numAction - 2)
-                    break
-                case 'Мега зелье':
-                    player.timeEffects = Object.fromEntries(Object.keys(player.timeEffects).map(i => [i, player.timeEffects[i] + item.effect]))
-                    break
-                case 'Зелье активатор':
-                    switch(item.target) {
-                        case ('resistance'):
-                            player.otherTimeEffects.resistance = true
-                            break
-                        case ('invulnerability'):
-                            player.otherTimeEffects.invulnerability = true
-                            break
-                        case ('spikes'):
-                            player.otherTimeEffects.spikes = true
-                            break
-                        case ('fireAttack'):
-                            player.otherTimeEffects.fireAttack = true
-                            break
-                    }
-                    player.inventory.storageItemsStats.splice(numAction - 2)
-                    break
-                case 'Пиво':
-                    console.log('|  Выберете врага для нанесения урона (Введите 6 чтобы вернуться)::                                                              |')
-                    console.log("|                                                                                                                                |")
-                    let enemyNum = 0
-                    let targetEnemyIndex = ''
-                    for (let i = 0; i < enemiesList.length; i += 1) {
-                        enemyNumM += 1
-                        const enemy = enemiesList[i]
-                        console.log(`|  ${enemyNum}. ${enemy.name}`)
-                    }
-                    enemyNum = 0
-                    const action = readlineSync.question('|  Action: ')
-                    const numAction = parseInt(action)
-                    if (0 < numAction && numAction <= enemiesList.length) {
-                        const targetEnemyIndex = enemiesList[numAction - 1]
-                        enemiesList[targetEnemyIndex].hits -= item.effect
-                        if (enemiesList[targetEnemyIndex].hits <= 0) {
-                            enemiesList.splice(targetEnemyIndex)
+        console.log("|  У вас нет вещей в инвентаре.                                                                                   |")
+        return playerTurn()
+    }
+    console.log("|  Список ваших вещей:                                                                                                           |")
+    let orderNum = 0
+    let prices = []
+    for (let i = 0; i < player.inventory.storageItemsStats.length; i += 1) {
+        const item = player.inventory.storageItemsStats[i]
+        orderNum += 1
+        console.log(`|  ${orderNum}. ${item.name} (Описание: ${item.explanation || 'нет описания'})`)
+        prices.push({ price: item.price, index: i })
+    }
+    console.log("|  Введите номер вещи, которую вы хотите использовать. Для выхода введите 0.                                                     |")
+    const action = readlineSync.question('|  Action: ')
+    const numAction = parseInt(action)
+    
+    if (numAction >= 1 && numAction <= prices.length) {
+        const item = player.inventory.storageItemsStats[numAction - 1]
+        switch(item.class) {
+            case 'Зелье характеристик':
+                switch(item.target) {
+                    case 'hits':
+                        player.stats.hits += item.effect
+                        if (player.stats.hits > player.stats.max_hits) {
+                            player.stats.hits = player.stats.max_hits
                         }
-                    } else if (numAction === 6) {
-                        return itemsUse()
-                    } else {
-                        console.log("|  Некорректный ввод, введите число из списка.                                                                                   |")
-                        return itemsUse()
+                        break
+                    case 'time_hits':
+                        player.stats.time_hits += item.effect
+                        break
+                    case 'ac':
+                        player.timeEffects.timeAc += item.effect
+                        break
+                    case 'strengh':
+                        player.timeEffects.timeStrenght += item.effect
+                        break
+                    case 'dexterity':
+                        player.timeEffects.timeDexterity += item.effect
+                        break
+                    case 'physique':
+                        player.timeEffects.timePhysique += item.effect
+                        break
+                    case 'intelligence':
+                        player.timeEffects.timeIntelligence += item.effect
+                        break
+                    case 'wisdom':
+                        player.timeEffects.timeWisdom += item.effect
+                        break
+                    case 'charisma':
+                        player.timeEffects.timeCharisma += item.effect
+                        break
+                }
+                player.inventory.storageItemsStats.splice(numAction - 1, 1)
+                break
+            case 'Мега зелье':
+                player.timeEffects = Object.fromEntries(Object.keys(player.timeEffects).map(i => [i, player.timeEffects[i] + item.effect]))
+                player.inventory.storageItemsStats.splice(numAction - 1, 1)
+                break
+            case 'Зелье активатор':
+                switch(item.target) {
+                    case 'resistance':
+                        player.otherTimeEffects.resistance = true
+                        break
+                    case 'invulnerability':
+                        player.otherTimeEffects.invulnerability = true
+                        break
+                    case 'spikes':
+                        player.otherTimeEffects.spikes = true
+                        break
+                    case 'fireAttack':
+                        player.otherTimeEffects.fireAttack = true
+                        break
+                }
+                player.inventory.storageItemsStats.splice(numAction - 1, 1)
+                break
+            case 'Пиво':
+                console.log("|  Выберете врага для нанесения урона (Введите 0 чтобы вернуться):                                                              |")
+                console.log("|                                                                                                                                |")
+                let enemyNum = 0
+                for (let i = 0; i < enemiesList.length; i += 1) {
+                    enemyNum += 1
+                    const enemy = enemiesList[i]
+                    console.log(`|  ${enemyNum}. ${enemy.name}`)
+                }
+                enemyNum = 0
+                const beerAction = readlineSync.question('|  Action: ')
+                const numBeerAction = parseInt(beerAction)
+                if (numBeerAction >= 1 && numBeerAction <= enemiesList.length) {
+                    const targetEnemyIndex = numBeerAction - 1
+                    enemiesList[targetEnemyIndex].hits -= item.effect
+                    if (enemiesList[targetEnemyIndex].hits <= 0) {
+                        enemiesList.splice(targetEnemyIndex, 1)
                     }
-                    player.inventory.storageItemsStats.splice(numAction - 2)
-                    break
-                default:
-                    console.log('|  Вы не можете использовать это во время битвы.                                                                                 |')
-            }
-            return enemiesTurn()
-        } else if (numAction === 1) {
-            return playerTurn()
-        } else {
-            console.log("|  Некорректный ввод, введите число из списка.                                                                                   |")
-            return playerTurn()
+                    player.inventory.storageItemsStats.splice(numAction - 1, 1)
+                } else if (numBeerAction === 0) {
+                    return itemsUse()
+                } else {
+                    console.log("|  Некорректный ввод, введите число из списка.                                                                                   |")
+                    return itemsUse()
+                }
+                break
+            default:
+                console.log('|  Вы не можете использовать это во время битвы.                                                                                 |')
+                return playerTurn()
         }
+        return enemiesTurn()
+    } else if (numAction === 0) {
+        return playerTurn()
+    } else {
+        console.log("|  Некорректный ввод, введите число из списка.                                                                                   |")
+        return itemsUse()
+    }
 }
 
-const stelthTry = () => {
+// попытка скрыться
+const stealthTry = () => {
     if (player.stats.stealth === true) {
-        const stelthDice = diceRandomizer(20) + player.characteristic.dexterity + player.timeEffects.timeDexterity
-        if (stelthDice >= 18 + enemiesList.length) {
+        const stealthDice = diceRandomizer(20) + player.characteristic.dexterity + player.timeEffects.timeDexterity
+        if (stealthDice >= 18 + enemiesList.length) {
             console.log("|  Вам удалось скрыться!                                                                                                           |")
             return final('Скрылся')
         } else {
-            console.log("|У вас не получилось скрыться!                                                                                                     |")
+            console.log("|  У вас не получилось скрыться!                                                                                                     |")
             return enemiesTurn()
         }
     } else {
@@ -626,8 +655,9 @@ const stelthTry = () => {
     }
 }
 
+// движение в бою
 const move = () => {
-    console,log("|  В какое направление двигаться?                                                                                                |")
+    console.log("|  В какое направление двигаться?                                                                                                |")
     console.log("|                                                                                                                                |")
     console.log("|  1. Вперед                                                                                                                     |")
     console.log("|  2. Назад                                                                                                                      |")
@@ -636,31 +666,31 @@ const move = () => {
     let action = readlineSync.question('|  Action: ')
     switch(action) {
         case "1":
-            movePossibility = false
+            let movePossibility = false
             for (const i of enemiesList) {
                 if (i.distance > 1) {
                     movePossibility = true
                 }
             }
             if (movePossibility === true) {
-                enemiesList = enemiesList.map(i => {
-                    const result = i.distance - player.speed - player.timeEffects.timeSpeed
-                    if (result < 1) {
-                        result = 1
-                        return result
+                for (let i = 0; i < enemiesList.length; i++) {
+                    let newDistance = enemiesList[i].distance - player.stats.speed - player.timeEffects.timeSpeed
+                    if (newDistance < 1) {
+                        newDistance = 1
                     }
-                    return result
-                })
-                
-                ("|  Вы врезались в проивника, он стоит слишком близко чтобы двигаться вперед.                                                     |")
+                    enemiesList[i].distance = newDistance
+                }
+                console.log("|  Вы двигаетесь вперёд.                                                                                                          |")
+                return enemiesTurn()
             } else {
-                console.log("|  Вы врезались в проивника, он стоит слишком близко чтобы двигаться вперед.                                                     |")
+                console.log("|  Вы врезались в противника, он стоит слишком близко чтобы двигаться вперед.                                                     |")
                 return enemiesTurn()
             }
-            break
         case "2":
-            enemiesList = enemiesList.map(i => i.distance + player.speed + player.timeEffects.timeSpeed)
-            ("|  Вы отступаете назад.                                                                                                          |")
+            for (let i = 0; i < enemiesList.length; i++) {
+                enemiesList[i].distance += player.stats.speed + player.timeEffects.timeSpeed
+            }
+            console.log("|  Вы отступаете назад.                                                                                                          |")
             return enemiesTurn()
         case "3":
             return playerTurn()
@@ -670,11 +700,7 @@ const move = () => {
     }
 }
 
-
-
-
-
-
+// ход врагов
 const enemiesTurn = () => {
     if (enemiesList.length === 0) {
         return final('Победа')
@@ -686,7 +712,9 @@ const enemiesTurn = () => {
         enemiesList[i].timeEffects.time -= 1
         if (enemiesList[i].timeEffects.time <= 0) {
             enemiesList[i].timeEffects.fire = 0
+            enemiesList[i].timeEffects.acid = 0
         }
+        
         if (player.otherTimeEffects.fireAttack) {
             enemiesList[i].hits -= player.characteristic.intelligence + player.timeEffects.timeIntelligence
         }
@@ -703,18 +731,11 @@ const enemiesTurn = () => {
         if (i >= enemiesList.length) {
             break
         }
+        
         const enemyAction = diceRandomizer(2)
     
-        switch(enemyAction) {
-            case 1:
-                enemyAttack()
-                break
-            case 2:
-                enemyMove()
-                break
-        }
-
-        const enemyAttack = () => {
+        // функция атаки врага
+        const enemyAttackFunc = () => {
             let attackResult = 0
             let damageResult = 0
             const attackList = Object.values(enemiesList[i].attack)
@@ -722,14 +743,14 @@ const enemiesTurn = () => {
             switch(attackList[attackWay - 1].class) {
                 case 'Дальний':
                     if (enemiesList[i].distance === 1) {
-                        return enemyMove("back")
+                        return enemyMoveFunc("back")
                     }
                     attackResult += diceRandomizer(20) + attackList[attackWay - 1].attack
                     damageResult += attackList[attackWay - 1].damage
                     break
                 case 'Ближний':
                     if (enemiesList[i].distance !== 1) {
-                        return enemyMove("go")
+                        return enemyMoveFunc("go")
                     }
                     attackResult += diceRandomizer(20) + attackList[attackWay - 1].attack
                     damageResult += attackList[attackWay - 1].damage
@@ -748,7 +769,7 @@ const enemiesTurn = () => {
             }
 
             if ('effect' in attackList[attackWay - 1]) {
-                switch(attackList[attackWay - 1].class) {
+                switch(attackList[attackWay - 1].effect.class) {
                     case 'Отравление':
                         player.otherTimeEffects.acid += attackList[attackWay - 1].effect.subEffect
                         break
@@ -802,11 +823,12 @@ const enemiesTurn = () => {
             return
         }
 
-        const enemyMove = (request = 'stand') => {
+        // функция движения врага
+        const enemyMoveFunc = (request = 'stand') => {
             switch(request) {
                 case 'stand':
                     if (enemiesList[i].distance === 1) {
-                        return enemyAttack()
+                        return enemyAttackFunc()
                     } else {
                         enemiesList[i].distance -= enemiesList[i].speed
                         if (enemiesList[i].distance < 1) {
@@ -826,6 +848,14 @@ const enemiesTurn = () => {
             }
             return
         }
+        
+        // выполнение действия врага
+        if (enemyAction === 1) {
+            enemyAttackFunc()
+        } else {
+            enemyMoveFunc()
+        }
+        
         if (player.stats.hits <= 0) {
             return final('Поражение')
         }
@@ -833,15 +863,17 @@ const enemiesTurn = () => {
     return playerTurn()
 }
 
+// завершение битвы
 const final = (result) => {
     switch(result) {
         case 'Поражение':
-            
+            console.log('|  Игра окончена.')
+            return 'Поражение'
         case 'Победа':
-            finalResult = result
-            return result  
+            console.log('|  Битва окончена.')
+            return 'Победа'
         case 'Скрылся':
-            finalResult = result
-            return result
+            console.log('|  Вы скрылись.')
+            return 'Скрылся'
     }
 }

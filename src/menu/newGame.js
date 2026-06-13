@@ -1,7 +1,8 @@
 import readlineSync from 'readline-sync'
 import fs from 'fs'
 import { menu } from './index.js'
-import { player } from '../player.js'
+import { player } from '../Game/player.js'
+import { gameState } from '../Game/game.js'
 import { armors } from '../items/armor.js'
 import { arms } from '../items/arms.js'
 import { potions, magicstaffs, artifacts } from '../items/magicItems.js'
@@ -97,14 +98,28 @@ const inventoryChoose = () => {
   return finalPlayerChoose()
 }
 
-const finalPlayerChoose = () => {
-  const content = fs.readFileSync('assets/newGame_images/newGameMenu3.txt', 'utf-8')
-  console.log(content)
-  player.name = readlineSync.question('|  Action: ')
+const finalPlayerChoose = async () => {
+    const content = fs.readFileSync('assets/newGame_images/newGameMenu3.txt', 'utf-8')
+    console.log(content)
+    player.name = readlineSync.question('|  Action: ')
 
-  const content2 = fs.readFileSync('assets/newGame_images/newGameMenu4.txt', 'utf-8')
-  прописать!!! = readlineSync.question('|  Action: ')
-  console.log(content2)
-  console.log(player)
-  return //game()
+    const content2 = fs.readFileSync('assets/newGame_images/newGameMenu4.txt', 'utf-8')
+    console.log(content2)
+    const locationChoice = readlineSync.question('|  Action: ')
+    
+    if (locationChoice === '1') {
+        gameState.currentLocation = 'catacombs'
+    } else if (locationChoice === '2') {
+        gameState.currentLocation = 'tunnels'
+    } else if (locationChoice === '3') {
+        gameState.currentLocation = 'temple'
+    } else {
+        gameState.currentLocation = 'catacombs'
+    }
+    
+    console.log('\n|  Персонаж создан!')
+    console.log(player)
+    
+    const { game } = await import('../Game/game.js')
+    return game()
 }

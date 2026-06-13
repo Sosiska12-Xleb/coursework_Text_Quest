@@ -1,6 +1,6 @@
 import readlineSync from 'readline-sync'
 import fs from 'fs'
-import { clearScreen } from "./index.js"
+import { clearScreen } from '../menu/index.js'
 import { arms } from "../items/arms.js"
 import { armors } from "../items/armor.js"
 import { magicArmor, magicWeapon, magicstaffs, artifacts, potions } from "../items/magicItems.js"
