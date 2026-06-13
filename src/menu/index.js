@@ -2,7 +2,6 @@
 import readlineSync from 'readline-sync'
 import fs from 'fs'
 import { about } from './about.js'
-import { achievements } from './achievements.js'
 import { characteristicChoose } from './newGame.js'
 import { checkSaveExists, loadGame } from '../Game/save.js'
 import { game } from '../Game/game.js'
@@ -45,17 +44,12 @@ const menu = () => {
                 clearScreen()
                 clearHistory() // очистка истории при новой игре
                 return characteristicChoose()
-            case '3': // достижения (заглушка)
-                clearScreen()
-                console.log('|  Достижения временно недоступны.')
-                return menu()
-            case '4': // об игре
+            case '3': // об игре
                 clearScreen()
                 return about()
-            case '5': // выход из игры
+            case '4': // выход из игры
                 console.log('|  Инициализация выхода...')
-                console.log('|  До свидания!')
-                process.exit(0)
+                return
             default:
                 console.log('|  Некорректный ввод команды, пожалуйста введите только число из меню')
                 break

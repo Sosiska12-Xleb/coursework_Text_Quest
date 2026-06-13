@@ -6,6 +6,18 @@ import { armors } from "../items/armor.js"
 import { magicArmor, magicWeapon, magicstaffs, artifacts, potions } from "../items/magicItems.js"
 import { player } from "./player.js"
 import { diceRandomizer } from '../diceRandomizer.js'
+import { calculateArmorAc } from '../items/armor.js'
+
+// функция для получения отображаемого КД брони
+const getDisplayAc = (armor) => {
+    if (armor.baseAc !== undefined) {
+        if (armor.useDexterity) {
+            return `${armor.baseAc} + модификатор ловкости (макс +2)`
+        }
+        return armor.baseAc
+    }
+    return armor.ac || '?'
+}
 
 const coinsChecker = (price) => {
     if (player.inventory.coins >= price) {
@@ -60,13 +72,12 @@ export const storeLight1 = (message = "") => {
             console.log(`3. ${arms.simpleHandWeapons.lightHammer.name} (Цена: ${arms.simpleHandWeapons.lightHammer.price}) (Описание: ${arms.simpleHandWeapons.lightHammer.property.join(', ')}, урон ${arms.simpleHandWeapons.lightHammer.damage})`)
             console.log(`4. ${arms.simpleRangeWeapon.sling.name} (Цена: ${arms.simpleRangeWeapon.sling.price}) (Описание: Простое дальнобойное оружие, урон ${arms.simpleRangeWeapon.sling.damage})`)
             console.log(`5. ${arms.simpleRangeWeapon.dart.name} x5 (Цена: ${arms.simpleRangeWeapon.dart.price * 5}) (Описание: ${arms.simpleRangeWeapon.dart.property.join(', ')}, урон ${arms.simpleRangeWeapon.dart.damage})`)
-            console.log(`6. ${armors.lightArmor.leatherArmor.name} (Цена: ${armors.lightArmor.leatherArmor.price}) (Описание: Класс брони ${armors.lightArmor.leatherArmor.ac}, Скрытность: ${armors.lightArmor.leatherArmor.stealth})`)
-            console.log(`7. ${armors.lightArmor.quiltedArmor.name} (Цена: ${armors.lightArmor.quiltedArmor.price}) (Описание: Класс брони ${armors.lightArmor.quiltedArmor.ac}, Скрытность: ${armors.lightArmor.quiltedArmor.stealth})`)
-            console.log(`8. ${armors.shield.name} (Цена: ${armors.shield.price}) (Описание: Даёт +${armors.shield.ac} к классу брони)`)
+            console.log(`6. ${armors.lightArmor.leatherArmor.name} (Цена: ${armors.lightArmor.leatherArmor.price}) (Описание: Класс брони ${armors.lightArmor.leatherArmor.baseAc}, Скрытность: ${armors.lightArmor.leatherArmor.stealth})`)
+            console.log(`7. ${armors.lightArmor.quiltedArmor.name} (Цена: ${armors.lightArmor.quiltedArmor.price}) (Описание: Класс брони ${armors.lightArmor.quiltedArmor.baseAc}, Скрытность: ${armors.lightArmor.quiltedArmor.stealth})`)
+            console.log(`8. ${armors.shield.name} (Цена: ${armors.shield.price}) (Описание: Даёт +${armors.shield.baseAc} к классу брони)`)
             console.log(`9. ${potions.healingPotion.name} x2 (Цена: ${potions.healingPotion.price * 2}) (Описание: ${potions.healingPotion.explanation})`)
             console.log(`10. ${potions.beer.name} x2 (Цена: ${potions.beer.price * 2}) (Описание: ${potions.beer.explanation})`)
             console.log(`11. ${artifacts.amuletHits.name} (Цена: ${artifacts.amuletHits.price}) (Описание: ${artifacts.amuletHits.explanation})`)
-            console.log(`12. ${arms.simpleHandWeapons.propellantSpear.name} x3 (Цена: ${arms.simpleHandWeapons.propellantSpear.price * 3}) (Описание: ${arms.simpleHandWeapons.propellantSpear.property.join(', ')}, урон ${arms.simpleHandWeapons.propellantSpear.damage})`)
             console.log(`13. ${arms.simpleHandWeapons.sickle.name} (Цена: ${arms.simpleHandWeapons.sickle.price}) (Описание: ${arms.simpleHandWeapons.sickle.property.join(', ')}, урон ${arms.simpleHandWeapons.sickle.damage})`)
             console.log(`14. ${arms.simpleRangeWeapon.lightCrossbow.name} (Цена: ${arms.simpleRangeWeapon.lightCrossbow.price}) (Описание: ${arms.simpleRangeWeapon.lightCrossbow.property.join(', ')}, урон ${arms.simpleRangeWeapon.lightCrossbow.damage})`)
             console.log(`15. ${potions.physiquePotion.name} (Цена: ${potions.physiquePotion.price}) (Описание: ${potions.physiquePotion.explanation})`)
@@ -216,9 +227,9 @@ export const storeLight1 = (message = "") => {
         case "2":
             return storeLight1(sell(() => storeLight1()))
         case "3":
-            console.log("\nСтарик смотрит на вас пустыми глазами. Вы замечаете, что сквозь его грудь видно стену.")
+            console.log("Старик смотрит на вас пустыми глазами. Вы замечаете, что сквозь его грудь видно стену.")
             console.log("Он не живой. Как и вы.")
-            console.log("\nО чём спросить?")
+            console.log("О чём спросить?")
             console.log("1. Спросить, помнит ли он свою смерть.")
             console.log("2. Спросить, зачем мы здесь.")
             console.log("3. Спросить, можно ли отсюда уйти.")
@@ -228,28 +239,28 @@ export const storeLight1 = (message = "") => {
             
             switch(talkAction) {
                 case "1":
-                    console.log("\nСтарик медленно поднимает руку и смотрит на неё:")
-                    console.log("\"Помню... клинок. Чей-то крик. Боль в груди. А потом... темнота. И я здесь. Как и ты. Как и все.\"")
+                    console.log("Старик медленно поднимает руку и смотрит на неё:")
+                    console.log("Помню... клинок. Чей-то крик. Боль в груди. А потом... темнота. И я здесь. Как и ты. Как и все.")
                     console.log("Он опускает руку и снова смотрит сквозь вас.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeLight1()
                 case "2":
-                    console.log("\nОн пожимает плечами, и сквозь него проступает каменная кладка:")
-                    console.log("\"Никто не знает. Мы просто здесь. Кто-то говорит, что это наказание. Кто-то — что чистилище. Я не знаю.\"")
-                    console.log("\"Я знаю только, что монеты здесь нужны. Для чего — не помню.\"")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    console.log("Он пожимает плечами, и сквозь него проступает каменная кладка:")
+                    console.log("Никто не знает. Мы просто здесь. Кто-то говорит, что это наказание. Кто-то — что чистилище. Я не знаю.")
+                    console.log("Я знаю только, что монеты здесь нужны. Для чего — не помню.")
+                    readlineSync.question("Enter...")
                     return storeLight1()
                 case "3":
-                    console.log("\nСтарик долго молчит, затем тихо произносит:")
-                    console.log("\"Говорят, внизу есть дверь. Те, кто прошёл через неё... не возвращались. Может, они ушли. Может, их больше нет.\"")
+                    console.log("Старик долго молчит, затем тихо произносит:")
+                    console.log("Говорят, внизу есть дверь. Те, кто прошёл через неё... не возвращались. Может, они ушли. Может, их больше нет.")
                     console.log("Он указывает куда-то в пол.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeLight1()
                 case "4":
                     return storeLight1()
                 default:
                     console.log("Старик застывает, превращаясь в каменное изваяние на несколько секунд, затем снова оживает.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeLight1()
             }
         case "4":
@@ -274,8 +285,8 @@ export const storeLight2 = (message = "") => {
             console.log(`4. ${arms.simpleHandWeapons.mace.name} (Цена: ${arms.simpleHandWeapons.mace.price}) (Описание: Простое оружие ближнего боя, урон ${arms.simpleHandWeapons.mace.damage})`)
             console.log(`5. ${arms.simpleHandWeapons.spear.name} (Цена: ${arms.simpleHandWeapons.spear.price}) (Описание: ${arms.simpleHandWeapons.spear.property.join(', ')}, урон ${arms.simpleHandWeapons.spear.damage})`)
             console.log(`6. ${arms.simpleHandWeapons.club.name} (Цена: ${arms.simpleHandWeapons.club.price}) (Описание: ${arms.simpleHandWeapons.club.property.join(', ')}, урон ${arms.simpleHandWeapons.club.damage})`)
-            console.log(`7. ${armors.lightArmor.revetedLeatherArmor.name} (Цена: ${armors.lightArmor.revetedLeatherArmor.price}) (Описание: Класс брони ${armors.lightArmor.revetedLeatherArmor.ac}, Скрытность: ${armors.lightArmor.revetedLeatherArmor.stealth})`)
-            console.log(`8. ${armors.mediumArmor.selfishArmor.name} (Цена: ${armors.mediumArmor.selfishArmor.price}) (Описание: Класс брони ${armors.mediumArmor.selfishArmor.ac}, Скрытность: ${armors.mediumArmor.selfishArmor.stealth})`)
+            console.log(`7. ${armors.lightArmor.revetedLeatherArmor.name} (Цена: ${armors.lightArmor.revetedLeatherArmor.price}) (Описание: Класс брони ${armors.lightArmor.revetedLeatherArmor.baseAc}, Скрытность: ${armors.lightArmor.revetedLeatherArmor.stealth})`)
+            console.log(`8. ${armors.mediumArmor.selfishArmor.name} (Цена: ${armors.mediumArmor.selfishArmor.price}) (Описание: Класс брони ${armors.mediumArmor.selfishArmor.baseAc}, Скрытность: ${armors.mediumArmor.selfishArmor.stealth})`)
             console.log(`9. ${potions.healingPotion.name} x3 (Цена: ${potions.healingPotion.price * 3}) (Описание: ${potions.healingPotion.explanation})`)
             console.log(`10. ${potions.temporaryHealingPotion.name} (Цена: ${potions.temporaryHealingPotion.price}) (Описание: ${potions.temporaryHealingPotion.explanation})`)
             console.log(`11. ${potions.kvas.name} (Цена: ${potions.kvas.price}) (Описание: ${potions.kvas.explanation})`)
@@ -420,9 +431,9 @@ export const storeLight2 = (message = "") => {
         case "2":
             return storeLight2(sell(() => storeLight2()))
         case "3":
-            console.log("\nЖенщина сидит на камне и перебирает чётки. Вы замечаете, что её пальцы иногда проходят сквозь костяшки.")
+            console.log("Женщина сидит на камне и перебирает чётки. Вы замечаете, что её пальцы иногда проходят сквозь костяшки.")
             console.log("Она поднимает на вас пустые глаза.")
-            console.log("\nО чём спросить?")
+            console.log("О чём спросить?")
             console.log("1. Спросить, как она здесь оказалась.")
             console.log("2. Спросить, что будет дальше.")
             console.log("3. Спросить, помнит ли она своё имя.")
@@ -432,28 +443,28 @@ export const storeLight2 = (message = "") => {
             
             switch(talkAction2) {
                 case "1":
-                    console.log("\nОна усмехается, и её лицо на секунду становится молодым, затем снова старым:")
-                    console.log("\"Я умерла. Как и ты. Как и все здесь. Клинок, яд, падение... какая разница? Результат один.\"")
+                    console.log("Она усмехается, и её лицо на секунду становится молодым, затем снова старым:")
+                    console.log("Я умерла. Как и ты. Как и все здесь. Клинок, яд, падение... какая разница? Результат один.")
                     console.log("Она сжимает чётки, и те рассыпаются в прах, а затем снова появляются в её руках.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeLight2()
                 case "2":
-                    console.log("\nОна долго молчит, затем указывает вниз:")
-                    console.log("\"Дальше? Ниже. Всегда ниже. Говорят, на самом дне есть дверь. Но я не знаю никого, кто бы через неё прошёл.\"")
-                    console.log("\"Может, те, кто прошёл, просто перестали быть.\"")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    console.log("Она долго молчит, затем указывает вниз:")
+                    console.log("Дальше? Ниже. Всегда ниже. Говорят, на самом дне есть дверь. Но я не знаю никого, кто бы через неё прошёл.")
+                    console.log("Может, те, кто прошёл, просто перестали быть.")
+                    readlineSync.question("Enter...")
                     return storeLight2()
                 case "3":
-                    console.log("\nОна замирает, и её лицо становится пустым, как белый лист:")
-                    console.log("\"Нет. Я не помню. Здесь никто не помнит. Только миг. Только боль. А потом пустота.\"")
-                    console.log("\"Зато я помню, сколько стоят мои товары. Странно, правда?\"")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    console.log("Она замирает, и её лицо становится пустым, как белый лист:")
+                    console.log("Нет. Я не помню. Здесь никто не помнит. Только миг. Только боль. А потом пустота.\"")
+                    console.log("Зато я помню, сколько стоят мои товары. Странно, правда?\"")
+                    readlineSync.question("Enter...")
                     return storeLight2()
                 case "4":
                     return storeLight2()
                 default:
                     console.log("Она исчезает на секунду, затем снова появляется на том же месте.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeLight2()
             }
         case "4":
@@ -477,9 +488,9 @@ export const storeLight3 = (message = "") => {
             console.log(`3. ${arms.simpleRangeWeapon.lightCrossbow.name} (Цена: ${arms.simpleRangeWeapon.lightCrossbow.price}) (Описание: ${arms.simpleRangeWeapon.lightCrossbow.property.join(', ')}, урон ${arms.simpleRangeWeapon.lightCrossbow.damage})`)
             console.log(`4. ${arms.simpleRangeWeapon.dart.name} x10 (Цена: ${arms.simpleRangeWeapon.dart.price * 10}) (Описание: ${arms.simpleRangeWeapon.dart.property.join(', ')}, урон ${arms.simpleRangeWeapon.dart.damage})`)
             console.log(`5. ${arms.simpleRangeWeapon.sling.name} (Цена: ${arms.simpleRangeWeapon.sling.price}) (Описание: Простое дальнобойное оружие, урон ${arms.simpleRangeWeapon.sling.damage})`)
-            console.log(`6. ${armors.mediumArmor.chainmailShirt.name} (Цена: ${armors.mediumArmor.chainmailShirt.price}) (Описание: Класс брони ${armors.mediumArmor.chainmailShirt.ac}, Скрытность: ${armors.mediumArmor.chainmailShirt.stealth})`)
-            console.log(`7. ${armors.shield.name} (Цена: ${armors.shield.price}) (Описание: Даёт +${armors.shield.ac} к классу брони)`)
-            console.log(`8. ${armors.heavyArmor.ringShapedArmor.name} (Цена: ${armors.heavyArmor.ringShapedArmor.price}) (Описание: Класс брони ${armors.heavyArmor.ringShapedArmor.ac})`)
+            console.log(`6. ${armors.mediumArmor.chainmailShirt.name} (Цена: ${armors.mediumArmor.chainmailShirt.price}) (Описание: Класс брони ${armors.mediumArmor.chainmailShirt.baseAc}, Скрытность: ${armors.mediumArmor.chainmailShirt.stealth})`)
+            console.log(`7. ${armors.shield.name} (Цена: ${armors.shield.price}) (Описание: Даёт +${armors.shield.baseAc} к классу брони)`)
+            console.log(`8. ${armors.heavyArmor.ringShapedArmor.name} (Цена: ${armors.heavyArmor.ringShapedArmor.price}) (Описание: Класс брони ${armors.heavyArmor.ringShapedArmor.baseAc})`)
             console.log(`9. ${potions.dexterityPotion.name} (Цена: ${potions.dexterityPotion.price}) (Описание: ${potions.dexterityPotion.explanation})`)
             console.log(`10. ${potions.strenghtPotion.name} (Цена: ${potions.strenghtPotion.price}) (Описание: ${potions.strenghtPotion.explanation})`)
             console.log(`11. ${potions.bhealingPotion.name} (Цена: ${potions.bhealingPotion.price}) (Описание: ${potions.bhealingPotion.explanation})`)
@@ -633,9 +644,9 @@ export const storeLight3 = (message = "") => {
         case "2":
             return storeLight3(sell(() => storeLight3()))
         case "3":
-            console.log("\nФигура в бинтах сидит в углу и тихо плачет. Слёз нет, но тело сотрясается.")
+            console.log("Фигура в бинтах сидит в углу и тихо плачет. Слёз нет, но тело сотрясается.")
             console.log("Вы подходите ближе, и она поднимает голову. Под бинтами — пустота.")
-            console.log("\nВы можете:")
+            console.log("Вы можете:")
             console.log("1. Спросить, почему она плачет.")
             console.log("2. Спросить, помнит ли она что-то.")
             console.log("3. Просто постоять рядом.")
@@ -645,29 +656,29 @@ export const storeLight3 = (message = "") => {
             
             switch(talkAction3) {
                 case "1":
-                    console.log("\nИз-под бинтов доносится шёпот:")
-                    console.log("\"Я не знаю. Я всегда плачу. Здесь нет слёз, но тело помнит. Оно помнит боль, а я не знаю — чью.\"")
+                    console.log("Из-под бинтов доносится шёпот:")
+                    console.log("Я не знаю. Я всегда плачу. Здесь нет слёз, но тело помнит. Оно помнит боль, а я не знаю — чью.")
                     console.log("Она снова начинает сотрясаться в беззвучном плаче.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeLight3()
                 case "2":
-                    console.log("\nОна замирает, затем медленно качает головой:")
-                    console.log("\"Я помню... холод. И темноту. И чей-то крик. Может, мой. Может, не мой. Здесь всё чужое.\"")
+                    console.log("Она замирает, затем медленно качает головой:")
+                    console.log("Я помню... холод. И темноту. И чей-то крик. Может, мой. Может, не мой. Здесь всё чужое.")
                     console.log("Она протягивает бинтованную руку, но вы не решаетесь её коснуться.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeLight3()
                 case "3":
-                    console.log("\nВы молча стоите рядом. Она постепенно успокаивается.")
+                    console.log("Вы молча стоите рядом. Она постепенно успокаивается.")
                     console.log("Через несколько минут она поднимает голову и тихо говорит:")
-                    console.log("\"Спасибо. Я почти забыла, что здесь есть кто-то кроме меня.\"")
+                    console.log("Спасибо. Я почти забыла, что здесь есть кто-то кроме меня.")
                     console.log("Бинты слегка шевелятся, будто под ними кто-то улыбнулся.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeLight3()
                 case "4":
                     return storeLight3()
                 default:
                     console.log("Она исчезает. Вы остаётесь один в тишине.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeLight3()
             }
         case "4":
@@ -693,9 +704,9 @@ export const storeMedium1 = (message = "") => {
             console.log(`5. ${arms.militaryHandWeapons.glaive.name} (Цена: ${arms.militaryHandWeapons.glaive.price}) (Описание: ${arms.militaryHandWeapons.glaive.property.join(', ')}, урон ${arms.militaryHandWeapons.glaive.damage})`)
             console.log(`6. ${arms.militaryRangeWeapon.heavyCrossbow.name} (Цена: ${arms.militaryRangeWeapon.heavyCrossbow.price}) (Описание: ${arms.militaryRangeWeapon.heavyCrossbow.property.join(', ')}, урон ${arms.militaryRangeWeapon.heavyCrossbow.damage})`)
             console.log(`7. ${arms.militaryRangeWeapon.longBow.name} (Цена: ${arms.militaryRangeWeapon.longBow.price}) (Описание: ${arms.militaryRangeWeapon.longBow.property.join(', ')}, урон ${arms.militaryRangeWeapon.longBow.damage})`)
-            console.log(`8. ${armors.mediumArmor.scalyArmor.name} (Цена: ${armors.mediumArmor.scalyArmor.price}) (Описание: Класс брони ${armors.mediumArmor.scalyArmor.ac})`)
-            console.log(`9. ${armors.mediumArmor.cuirass.name} (Цена: ${armors.mediumArmor.cuirass.price}) (Описание: Класс брони ${armors.mediumArmor.cuirass.ac})`)
-            console.log(`10. ${armors.heavyArmor.chainmail.name} (Цена: ${armors.heavyArmor.chainmail.price}) (Описание: Класс брони ${armors.heavyArmor.chainmail.ac})`)
+            console.log(`8. ${armors.mediumArmor.scalyArmor.name} (Цена: ${armors.mediumArmor.scalyArmor.price}) (Описание: Класс брони ${armors.mediumArmor.scalyArmor.baseAc})`)
+            console.log(`9. ${armors.mediumArmor.cuirass.name} (Цена: ${armors.mediumArmor.cuirass.price}) (Описание: Класс брони ${armors.mediumArmor.cuirass.baseAc})`)
+            console.log(`10. ${armors.heavyArmor.chainmail.name} (Цена: ${armors.heavyArmor.chainmail.price}) (Описание: Класс брони ${armors.heavyArmor.chainmail.baseAc})`)
             console.log(`11. ${potions.protectionPotion.name} (Цена: ${potions.protectionPotion.price}) (Описание: ${potions.protectionPotion.explanation})`)
             console.log(`12. ${potions.btemporaryHealingPotion.name} (Цена: ${potions.btemporaryHealingPotion.price}) (Описание: ${potions.btemporaryHealingPotion.explanation})`)
             console.log(`13. ${potions.ehealingPotion.name} (Цена: ${potions.ehealingPotion.price}) (Описание: ${potions.ehealingPotion.explanation})`)
@@ -835,9 +846,9 @@ export const storeMedium1 = (message = "") => {
         case "2":
             return storeMedium1(sell(() => storeMedium1()))
         case "3":
-            console.log("\nПеред вами — металлическая консоль, вмонтированная в стену. Экран треснут, но работает.")
+            console.log("Перед вами — металлическая консоль, вмонтированная в стену. Экран треснут, но работает.")
             console.log("Механический голос звучит из динамиков, но в нём слышны помехи и странные звуки, похожие на вздохи.")
-            console.log("\nДоступные запросы:")
+            console.log("Доступные запросы:")
             console.log("1. Запросить данные о прибывших.")
             console.log("2. Запросить информацию о более глубоких уровнях.")
             console.log("3. Запросить данные о выходе.")
@@ -847,33 +858,33 @@ export const storeMedium1 = (message = "") => {
             
             switch(mechAction) {
                 case "1":
-                    console.log("\nГолос прерывается, затем произносит:")
+                    console.log("Голос прерывается, затем произносит:")
                     console.log("ЗАПРОС О ПРИБЫВШИХ. . . ПОСЛЕДНИЙ ПРИБЫВШИЙ: ВЫ. 0 ДНЕЙ НАЗАД.")
                     console.log("ПРЕДЫДУЩИЙ: НЕИЗВЕСТЕН. ДАННЫЕ УТЕРЯНЫ.")
                     console.log("ВСЕГО ЗАРЕГИСТРИРОВАННЫХ: 14732. ТЕКУЩИХ АКТИВНЫХ: 1.")
                     console.log("ГОЛОС: ОСТАЛЬНЫЕ. . . УШЛИ ГЛУБЖЕ.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeMedium1()
                 case "2":
-                    console.log("\nЭкран мигает, показывая карту, покрытую красными пятнами:")
+                    console.log("Экран мигает, показывая карту, покрытую красными пятнами:")
                     console.log("УРОВЕНЬ 7: ТЕХНО-ТУННЕЛИ. ОПАСНОСТЬ: ВЫСОКАЯ.")
                     console.log("УРОВЕНЬ 8: НАЧАЛО ХРАМА. ОПАСНОСТЬ: КРИТИЧЕСКАЯ.")
                     console.log("УРОВЕНЬ 9 И НИЖЕ: ДАННЫЕ ОТСУТСТВУЮТ.")
                     console.log("ГОЛОС: НЕ РЕКОМЕНДУЕТСЯ СПУСКАТЬСЯ НИЖЕ УРОВНЯ 7.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить. . .")
+                    readlineSync.question("Enter...")
                     return storeMedium1()
                 case "3":
-                    console.log("\nГолос замолкает. В тишине слышно только потрескивание динамиков.")
+                    console.log("Голос замолкает. В тишине слышно только потрескивание динамиков.")
                     console.log("Затем шёпотом, почти беззвучно:")
                     console.log(". . . . КРИТИЧЕСКИЯ ОШИБКА. ИМПОРТИРОВАНОГО ОБЪЕКТА НЕ СУЩЕСТВУЕТ.")
                     console.log("Экран гаснет на секунду, затем снова загорается.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeMedium1()
                 case "4":
                     return storeMedium1()
                 default:
                     console.log("Консоль издаёт звук, похожий на вздох, и замолкает.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeMedium1()
             }
         case "4":
@@ -906,7 +917,7 @@ export const storeMedium2 = (message = "") => {
             console.log(`12. ${potions.resistancePotion.name} (Цена: ${potions.resistancePotion.price}) (Описание: ${potions.resistancePotion.explanation})`)
             console.log(`13. ${potions.firePotion.name} (Цена: ${potions.firePotion.price}) (Описание: ${potions.firePotion.explanation})`)
             console.log(`14. ${potions.kvas.name} x2 (Цена: ${potions.kvas.price * 2}) (Описание: ${potions.kvas.explanation})`)
-            console.log(`15. ${armors.mediumArmor.halfPlateArmor.name} (Цена: ${armors.mediumArmor.halfPlateArmor.price}) (Описание: Класс брони ${armors.mediumArmor.halfPlateArmor.ac})`)
+            console.log(`15. ${armors.mediumArmor.halfPlateArmor.name} (Цена: ${armors.mediumArmor.halfPlateArmor.price}) (Описание: Класс брони ${armors.mediumArmor.halfPlateArmor.baseAc})`)
             console.log("")
             console.log(`Ваш баланс: ${player.inventory.coins}`)
             console.log("")
@@ -1044,9 +1055,9 @@ export const storeMedium2 = (message = "") => {
         case "2":
             return storeMedium2(sell(() => storeMedium2()))
         case "3":
-            console.log("\nТорговый автомат мигает красным светом. Похоже у него больше разрешений чем нужно.")
+            console.log("Торговый автомат мигает красным светом. Похоже у него больше разрешений чем нужно.")
             console.log("Кроме покупок терминал показывает дополнительные опции.")
-            console.log("\nДоступные запросы:")
+            console.log("Доступные запросы:")
             console.log("1. Актитвация воздушных шлюзов.")
             console.log("2. Протокол 'Ластик'.")
             console.log("3. Отчет об работе Квантового мира.")
@@ -1056,33 +1067,33 @@ export const storeMedium2 = (message = "") => {
             
             switch(mechAction2) {
                 case "1":
-                    console.log("\nХотя вы и сделали запрос, ничего не произошло:")
-                    console.log("\"АКТИВАЦИЯ ВОЗДУШНЫХ ШЛЮЗОВ 3.52.9.45.35.L . . . . КРИТИЧЕСКАЯ ОШИБКА. ШЛЮЗЫ ОБЕСТОЧЕННЫ. ПЕРХОД К СЛЕДУЮЩЕМУ ШЛЮЗУ.\"")
+                    console.log("Хотя вы и сделали запрос, ничего не произошло:")
+                    console.log("АКТИВАЦИЯ ВОЗДУШНЫХ ШЛЮЗОВ 3.52.9.45.35.L . . . . КРИТИЧЕСКАЯ ОШИБКА. ШЛЮЗЫ ОБЕСТОЧЕННЫ. ПЕРХОД К СЛЕДУЮЩЕМУ ШЛЮЗУ.")
                     console.log("АКТИВАЦИЯ ВОЗДУШНЫХ ШЛЮЗОВ 3.78.45.1.6.2.U . . . .  КРИТИЧЕСКАЯ ОШИБКА. ШЛЮЗЫ ЗАСОРЕННЫ ОРГАНИЧЕСКИМИ ВЕЩЕСТВАМИ. ПЕРХОД К СЛЕДУЮЩЕМУ ШЛЮЗУ.")
                     console.log("АКТИВАЦИЯ ВОЗДУШНЫХ ШЛЮЗОВ 3.71248.45.35.65.32 . . . .  АКТИВАЦИЯ УСПЕШНА! ВНИМАНИЕ! РАБОТА ШЛЮЗОВ, КРАЙНЕ НЕ СТАБИЛЬНА, ВОЗМОЖНЫ ЖЕРТВЫ СРЕДИ ЖИВЫХ СУЩЕСТВ. ПЕРХОД К СЛЕДУЮЩЕМУ ШЛЮЗУ...")
                     console.log("Похоже это будет идти слишком долго, вы отменяете процесс.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question('Enter...')
                     return storeMedium2()
                 case "2":
-                    console.log("\nАКТИВАЦИЯ ПРОТОКОЛА 'ЛАСТИК'. . . .")
-                    console.log("\". . . . УСПЕШНО! ИЗМЕРЕНИЕ '????????' БЫЛО УНИЧТОЖЕННО.\"")
-                    console.log(`\"ПОТЕРИ СРЕДИ ЖИТЕЛЕЙ ИЗМЕРНИЯ: ${diceRandomizer(1000000)}.\"`)
+                    console.log("АКТИВАЦИЯ ПРОТОКОЛА 'ЛАСТИК'. . . .")
+                    console.log(". . . . УСПЕШНО! ИЗМЕРЕНИЕ '????????' БЫЛО УНИЧТОЖЕННО.\"")
+                    console.log(`ПОТЕРИ СРЕДИ ЖИТЕЛЕЙ ИЗМЕРНИЯ: ${diceRandomizer(1000000)}.\"`)
                     console.log("ПОТРАЛ ИЗМЕРЕНИЯ '????????' УСПЕШНО ЗАКРЫТ.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeMedium2()
                 case "3":
-                    console.log("\nВРЕМЯ РАБОТЫ: . . . . . . 1241920757125320721235293859102875908234673571298365 ЛЕТ, 7 МЕСЯЦА, 2 НЕДЕЛИ 0 ДНЕЙ.")
+                    console.log("ВРЕМЯ РАБОТЫ: . . . . . . 1241920757125320721235293859102875908234673571298365 ЛЕТ, 7 МЕСЯЦА, 2 НЕДЕЛИ 0 ДНЕЙ.")
                     console.log(". . . . . ВНИМАНИЕ! КВАНТОВЫЙ МИР НАХОДИТСЯ В КРИТИЧЕСКОМ СОСТОЯНИИ, ПРИМЕРНОЕ ВРЕМЯ РАБОТЫ: НЕОГРАНИЧЕННО.")
                     console.log(". . . . ВНИМАНИЕ! ОБНАРУЖЕННЫ ОРГАНИЧЕСКИЕ СУЩЕСТВА КЛАСС ГУМАНОИД, ДАННЫЕ АКТИВЫ ПРИЧИСЛЕННЫ К ПАРАЗИТАМ УНИЧТОЖАЮЩИЕ СТРУКТУРЫ МИРА И РАБОЧИЙ ПЕРСОНАЛ.")
                     console.log(". . . . ВНИМАНИЕ! БЕТОННЫЕ ЛОВУШКИ АКТИВИРОВАННЫ, ДОЛГОЕ ПРИСЛОНЕНИЕ К СТЕНАМ ЖИВЫМИ СУЩЕСТВАМИ ПРИВОДИТ К ЗАПЕЧАТЫВАНИЮ.")
                     console.log(". . . . КРИТИЧЕСКАЯ ОШИБКА! ОБЬЕКТ 'ДАННЫЕ КВАНТОВОГО МИРА' НЕ НАЙДЕН")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeMedium2()
                 case "4":
                     return storeMedium2()
                 default:
                     console.log("Здесь могло быть больше информации...")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeMedium2()
             }
         case "4":
@@ -1250,9 +1261,9 @@ export const storeMedium3 = (message = "") => {
         case "2":
             return storeMedium3(sell(() => storeMedium3()))
         case "3":
-            console.log("\nГолограмма появляется перед вами. Это женщина в странном обмундировании, но она мерцает.")
+            console.log("Голограмма появляется перед вами. Это женщина в странном обмундировании, но она мерцает.")
             console.log("Её слова звучат с задержкой, будто она говорит из другого времени.")
-            console.log("\nЧто спросить?")
+            console.log("Что спросить?")
             console.log("1. Как ты здесь оказалась?")
             console.log("2. Что находится внизу?")
             console.log("3. Ты помнишь, как умерла?")
@@ -1262,31 +1273,31 @@ export const storeMedium3 = (message = "") => {
             
             switch(holoAction) {
                 case "1":
-                    console.log("\nГолограмма искажается, затем отвечает:")
-                    console.log("\"Я была инженером. Строила эти тоннели. А потом... авария. Взрыв. И я оказалась здесь.\"")
+                    console.log("Голограмма искажается, затем отвечает:")
+                    console.log("Я была инженером. Строила эти тоннели. А потом... авария. Взрыв. И я оказалась здесь.")
                     console.log("Она смотрит на свои мерцающие руки.")
-                    console.log("\"Теперь я часть системы. Часть этой тюрьмы.\"")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    console.log("Теперь я часть системы. Часть этой тюрьмы.")
+                    readlineSync.question("Enter...")
                     return storeMedium3()
                 case "2":
-                    console.log("\nОна исчезает на секунду, затем появляется снова, показывая карту:")
-                    console.log("\"Храм. Это не просто здание. Это сердце. Того, что держит нас здесь. Если его уничтожить... может, мы освободимся.\"")
+                    console.log("Она исчезает на секунду, затем появляется снова, показывая карту:")
+                    console.log("Храм. Это не просто здание. Это сердце. Того, что держит нас здесь. Если его уничтожить... может, мы освободимся.")
                     console.log("Карта гаснет.")
-                    console.log("\"Но никто не возвращался оттуда.\"")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    console.log("Но никто не возвращался оттуда.")
+                    readlineSync.question("Enter...")
                     return storeMedium3()
                 case "3":
-                    console.log("\nГолограмма замирает. Её лицо становится пустым.")
-                    console.log("\"Я... не помню. Помню только свет. Очень яркий свет. А потом темноту и эти стены.\"")
+                    console.log("Голограмма замирает. Её лицо становится пустым.")
+                    console.log("Я... не помню. Помню только свет. Очень яркий свет. А потом темноту и эти стены.")
                     console.log("Она пытается улыбнуться, но губы не слушаются.")
-                    console.log("\"Может, это и есть ад. Забыть свою смерть, но помнить, что ты мёртв.\"")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    console.log("Может, это и есть ад. Забыть свою смерть, но помнить, что ты мёртв.")
+                    readlineSync.question("Enter...")
                     return storeMedium3()
                 case "4":
                     return storeMedium3()
                 default:
                     console.log("Голограмма исчезает. Вы остаётесь один в тишине тоннеля.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeMedium3()
             }
         case "4":
@@ -1305,7 +1316,7 @@ export const storeHard1 = (message = "") => {
     switch(action) {
         case "1":
             console.log("Список товаров:")
-            console.log(`1. ${armors.heavyArmor.plateArmor.name} (Цена: ${armors.heavyArmor.plateArmor.price}) (Описание: Класс брони ${armors.heavyArmor.plateArmor.ac})`)
+            console.log(`1. ${armors.heavyArmor.plateArmor.name} (Цена: ${armors.heavyArmor.plateArmor.price}) (Описание: Класс брони ${armors.heavyArmor.plateArmor.baseAc})`)
             console.log(`2. ${magicArmor.strenghtPlateArmor.name} (Цена: ${magicArmor.strenghtPlateArmor.price}) (Описание: ${magicArmor.strenghtPlateArmor.explanation})`)
             console.log(`3. ${magicWeapon.vampirTwoHandedSword.name} (Цена: ${magicWeapon.vampirTwoHandedSword.price}) (Описание: ${magicWeapon.vampirTwoHandedSword.explanation})`)
             console.log(`4. ${magicWeapon.lifeStealerTwoHandedSword.name} (Цена: ${magicWeapon.lifeStealerTwoHandedSword.price}) (Описание: ${magicWeapon.lifeStealerTwoHandedSword.explanation})`)
@@ -1445,9 +1456,9 @@ export const storeHard1 = (message = "") => {
         case "2":
             return storeHard1(sell(() => storeHard1()))
         case "3":
-            console.log("\nПеред вами стоит существо, которое когда-то могло быть человеком. Сквозь его полупрозрачную кожу видно, как течёт чёрная жидкость.")
+            console.log("Перед вами стоит существо, которое когда-то могло быть человеком. Сквозь его полупрозрачную кожу видно, как течёт чёрная жидкость.")
             console.log("Оно говорит с вами, но рот не двигается. Голос звучит у вас в голове.")
-            console.log("\nЧто спросить?")
+            console.log("Что спросить?")
             console.log("1. Кто ты?")
             console.log("2. Зачем ты здесь?")
             console.log("3. Что ждёт меня внизу?")
@@ -1457,29 +1468,29 @@ export const storeHard1 = (message = "") => {
             
             switch(horrorAction) {
                 case "1":
-                    console.log("\nГолос в голове звучит устало, безжизненно:")
-                    console.log("\"Я был королём. Когда-то. У меня была армия, казна, власть. А теперь я продаю товары мертвецам.\"")
+                    console.log("Голос в голове звучит устало, безжизненно:")
+                    console.log("Я был королём. Когда-то. У меня была армия, казна, власть. А теперь я продаю товары мертвецам.")
                     console.log("Оно усмехается, и из трещин на его лице вытекает чёрная жидкость.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeHard1()
                 case "2":
-                    console.log("\nСущество медленно поднимает руку и смотрит на неё:")
-                    console.log("\"Я жду. Все мы здесь чего-то ждём. Того, кто сможет сделать то, что не смогли мы.\"")
+                    console.log("Существо медленно поднимает руку и смотрит на неё:")
+                    console.log("Я жду. Все мы здесь чего-то ждём. Того, кто сможет сделать то, что не смогли мы.")
                     console.log("Оно опускает руку и смотрит прямо на вас.")
-                    console.log("\"Может, это ты. А может, очередной мертвец.\"")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    console.log("Может, это ты. А может, очередной мертвец.")
+                    readlineSync.question("Enter...")
                     return storeHard1()
                 case "3":
-                    console.log("\nГолос становится тише, почти шёпотом:")
-                    console.log("\"Там, внизу, спит Он. Тот, кто создал это место. Тот, кто держит нас здесь. Если ты разбудишь Его...\"")
+                    console.log("Голос становится тише, почти шёпотом:")
+                    console.log("Там, внизу, спит Он. Тот, кто создал это место. Тот, кто держит нас здесь. Если ты разбудишь Его...")
                     console.log("Существо замолкает и исчезает. Вы остаётесь один в тишине.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeHard1()
                 case "4":
                     return storeHard1()
                 default:
                     console.log("Существо просто смотрит на вас. В его глазах — пустота.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeHard1()
             }
         case "4":
@@ -1647,9 +1658,9 @@ export const storeHard2 = (message = "") => {
         case "2":
             return storeHard2(sell(() => storeHard2()))
         case "3":
-            console.log("\nТень на стене начинает двигаться. Она отделяется от камня и принимает человеческую форму.")
+            console.log("Тень на стене начинает двигаться. Она отделяется от камня и принимает человеческую форму.")
             console.log("У неё нет лица, только очертания. Голос звучит из ниоткуда.")
-            console.log("\nЧто спросить?")
+            console.log("Что спросить?")
             console.log("1. Что ты такое?")
             console.log("2. Как здесь оказался?")
             console.log("3. Есть ли надежда?")
@@ -1659,29 +1670,29 @@ export const storeHard2 = (message = "") => {
             
             switch(shadowAction) {
                 case "1":
-                    console.log("\nТень колышется, затем отвечает тихо:")
-                    console.log("\"Я — тот, кто потерял всё. Имя, тело, память. Осталась только тень и тоска.\"")
+                    console.log("Тень колышется, затем отвечает тихо:")
+                    console.log("Я — тот, кто потерял всё. Имя, тело, память. Осталась только тень и тоска.")
                     console.log("Она протягивает руку, но когда вы пытаетесь её коснуться, она рассыпается, затем собирается снова.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeHard2()
                 case "2":
-                    console.log("\nТень замирает, затем начинает рассказывать:")
-                    console.log("\"Я пришёл сюда с отрядом. Мы искали выход. Нашли только смерть. Теперь я часть этих стен. Часть этого ада.\"")
+                    console.log("Тень замирает, затем начинает рассказывать:")
+                    console.log("Я пришёл сюда с отрядом. Мы искали выход. Нашли только смерть. Теперь я часть этих стен. Часть этого ада.")
                     console.log("Её голос дрожит, хотя лица не видно.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeHard2()
                 case "3":
-                    console.log("\nТень долго молчит. Затем тихо, почти неслышно:")
-                    console.log("\"Надежда... это единственное, что осталось. Даже здесь, даже после смерти. Пока есть надежда — ты ещё жив.\"")
+                    console.log("Тень долго молчит. Затем тихо, почти неслышно:")
+                    console.log("Надежда... это единственное, что осталось. Даже здесь, даже после смерти. Пока есть надежда — ты ещё жив.")
                     console.log("Она указывает куда-то вниз.")
-                    console.log("\"Иди. Может, ты найдёшь то, что не нашли мы.\"")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    console.log("Иди. Может, ты найдёшь то, что не нашли мы.")
+                    readlineSync.question("Enter...")
                     return storeHard2()
                 case "4":
                     return storeHard2()
                 default:
                     console.log("Тень исчезает так же внезапно, как и появилась.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeHard2()
             }
         case "4":
@@ -1855,9 +1866,9 @@ export const storeHard3 = (message = "") => {
         case "2":
             return storeHard3(sell(() => storeHard3()))
         case "3":
-            console.log("\nВ центре зала стоит каменный трон. На нём сидит фигура в чёрном. Вы не видите лица, только два красных глаза.")
+            console.log("В центре зала стоит каменный трон. На нём сидит фигура в чёрном. Вы не видите лица, только два красных глаза.")
             console.log("Она не двигается, но вы чувствуете, что она знает о вас всё.")
-            console.log("\nЧто спросить?")
+            console.log("Что спросить?")
             console.log("1. Кто создал это место?")
             console.log("2. Почему мы здесь?")
             console.log("3. Можно ли уйти?")
@@ -1867,30 +1878,30 @@ export const storeHard3 = (message = "") => {
             
             switch(throneAction) {
                 case "1":
-                    console.log("\nГолос разносится по всему залу, заставляя стены дрожать:")
-                    console.log("\"Он. Тот, кого нельзя называть. Он построил эту тюрьму для тех, кто не заслужил покоя.\"")
+                    console.log("Голос разносится по всему залу, заставляя стены дрожать:")
+                    console.log("Он. Тот, кого нельзя называть. Он построил эту тюрьму для тех, кто не заслужил покоя.")
                     console.log("Красные глаза сужаются.")
-                    console.log("\"Он всё ещё здесь. Глубоко внизу. Он ждёт.\"")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    console.log("Он всё ещё здесь. Глубоко внизу. Он ждёт.")
+                    readlineSync.question("Enter...")
                     return storeHard3()
                 case "2":
-                    console.log("\nФигура наклоняется вперёд, и вы видите, что под капюшоном — пустота.")
-                    console.log("\"Вы здесь, потому что убили. Украли. Предали. Вы заслужили это место. Каждый из вас.\"")
+                    console.log("Фигура наклоняется вперёд, и вы видите, что под капюшоном — пустота.")
+                    console.log("Вы здесь, потому что убили. Украли. Предали. Вы заслужили это место. Каждый из вас.")
                     console.log("Она откидывается назад, и её смех эхом разносится по залу.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeHard3()
                 case "3":
-                    console.log("\nТишина. Затем шёпот, полный боли:")
-                    console.log("\"Никто не уходит. Никто никогда не уходил. Те, кто пытался, стали частью стен. Частью этого места.\"")
+                    console.log("Тишина. Затем шёпот, полный боли:")
+                    console.log("Никто не уходит. Никто никогда не уходил. Те, кто пытался, стали частью стен. Частью этого места.")
                     console.log("Она указывает на стены, и вы замечаете, что в камне застыли человеческие лица.")
-                    console.log("\"Хочешь попробовать?\"")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    console.log("Хочешь попробовать?")
+                    readlineSync.question("Enter...")
                     return storeHard3()
                 case "4":
                     return storeHard3()
                 default:
                     console.log("Фигура замирает, и красные глаза гаснут. Вы чувствуете облегчение.")
-                    readlineSync.question("\nНажмите Enter, чтобы продолжить...")
+                    readlineSync.question("Enter...")
                     return storeHard3()
             }
         case "4":

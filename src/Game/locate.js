@@ -724,58 +724,78 @@ export const getRandomEvent = (locationKey) => {
 }
 
 export const executeEvent = async (event, locationKey) => {
-    if (event.type === 'battle') {
-        addHistory(`Начало битвы: ${event.name}`)
-        const result = await battleBegin(event.enemies)
-        if (result === 'Победа') {
-            addHistory(`Победа в битве: ${event.name}`)
-            battleReward(locationKey)
-            return 'continue'
-        } else if (result === 'Поражение') {
-            addHistory(`Поражение в битве: ${event.name}`)
-            return 'death'
-        } else if (result === 'Скрылся') {
-            addHistory(`Успешное скрытие в битве: ${event.name}`)
-            console.log('|  Вы скрылись в темноте.')
-            return 'continue'
-        }
+// обработка битвы
+if (event.type === 'battle') {
+    addHistory(`Начало битвы: ${event.name}`)
+    const result = await battleBegin(event.enemies)
+    
+    if (result === 'Поражение') {
+        addHistory(`Поражение в битве: ${event.name}`)
+        return 'death'
+    }
+    
+    if (result === 'Победа') {
+        addHistory(`Победа в битве: ${event.name}`)
+        battleReward(locationKey)
         return 'continue'
     }
     
+    if (result === 'Скрылся') {
+        addHistory(`Успешное скрытие в битве: ${event.name}`)
+        console.log('|  Вы скрылись в темноте.')
+        return 'continue'
+    }
+    
+    return 'continue'
+}
+    
+    // обработка магазина
     if (event.type === 'shop') {
         addHistory(`Посещение магазина: ${event.name}`)
         event.shop()
         return 'continue'
     }
     
+    // обработка выхода из локации
     if (event.type === 'exit') {
         addHistory(`Найден выход: ${event.name} -> ${event.nextLocation}`)
         console.log(`|  ${event.name}. Вы переходите в новую локацию.`)
         return { type: 'exit', nextLocation: event.nextLocation }
     }
     
+    // обработка обычных событий и сокровищниц
     if (event.type === 'event' || event.type === 'treasure') {
         addHistory(`Начало события: ${event.name}`)
         const eventResult = event.execute()
+        
+        // смерть во время события
         if (eventResult === 'death') {
             addHistory(`Смерть во время события: ${event.name}`)
             console.log('|  Событие оказалось смертельным...')
             return 'death'
         }
+        
+        // событие привело к битве
         if (eventResult && eventResult.type === 'battle') {
             addHistory(`Событие привело к битве: ${event.name}`)
-            const result = await battleBegin(eventResult.enemies)
-            if (result === 'Победа') {
+            const battleResult = await battleBegin(eventResult.enemies)
+            
+            // проверка на поражение в битве из события
+            if (battleResult === 'Поражение') {
+                addHistory(`Поражение в битве из события: ${event.name}`)
+                return 'death'
+            }
+            
+            // победа в битве из события
+            if (battleResult === 'Победа') {
                 addHistory(`Победа в битве из события: ${event.name}`)
                 battleReward(locationKey)
                 return 'continue'
             }
-            if (result === 'Поражение') {
-                addHistory(`Поражение в битве из события: ${event.name}`)
-                return 'death'
-            }
+            
             return 'continue'
         }
+        
         addHistory(`Завершение события: ${event.name}`)
         return 'continue'
     }

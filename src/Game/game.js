@@ -3,10 +3,9 @@ import readlineSync from 'readline-sync'
 import { player } from './player.js'
 import { locations, getRandomEvent, executeEvent } from './locate.js'
 import { saveGame, loadGame } from './save.js'
-import { addHistory, showHistory } from './history.js'
-import { armors } from '../items/armor.js'
-import { arms } from '../items/arms.js'
-import { magicWeapon, magicArmor, magicstaffs, artifacts, potions } from '../items/magicItems.js'
+import { addHistory, showHistory, clearHistory } from './history.js'
+import { menu } from '../menu/index.js'
+import { calculateArmorAc, dexterityRangeChecker } from '../items/armor.js'
 
 // состояние игры (текущая локация, флаг работы, количество шагов)
 export let gameState = {
@@ -180,50 +179,94 @@ const useItem = (item) => {
 }
 
 // функция надевания брони
+
 const equipArmor = (armor) => {
     // снятие текущей брони
     if (player.inventory.armors.armor !== '') {
         const currentArmor = player.inventory.armors.armor
-        player.stats.ac -= currentArmor.ac
+        // используем calculateArmorAc для получения правильного КД
+        const currentAc = calculateArmorAc(currentArmor)
+        player.stats.ac -= currentAc
         
         // снятие бонусов от магической брони
         if (currentArmor.target === 'strenght') {
-            player.characteristic.strenght -= currentArmor.effect
+            player.characteristic.strenght -= currentArmor.effect || 0
         } else if (currentArmor.target === 'dexterity') {
-            player.characteristic.dexterity -= currentArmor.effect
+            player.characteristic.dexterity -= currentArmor.effect || 0
         } else if (currentArmor.target === 'physique') {
-            player.characteristic.physique -= currentArmor.effect
+            player.characteristic.physique -= currentArmor.effect || 0
         } else if (currentArmor.target === 'intelligence') {
-            player.characteristic.intelligence -= currentArmor.effect
+            player.characteristic.intelligence -= currentArmor.effect || 0
         } else if (currentArmor.target === 'wisdom') {
-            player.characteristic.wisdom -= currentArmor.effect
+            player.characteristic.wisdom -= currentArmor.effect || 0
         } else if (currentArmor.target === 'charisma') {
-            player.characteristic.charisma -= currentArmor.effect
+            player.characteristic.charisma -= currentArmor.effect || 0
         }
         
-        // возврат снятой брони в инвентарь
         player.inventory.storageItemsStats.push(currentArmor)
         addHistory(`Снял броню ${currentArmor.name}`)
     }
     
-    // надевание новой брони
+    // надевание новой брони - рассчитываем КД правильно
+    let armorAc = 0
+    
+    // для обычной брони
+    if (armor.baseAc !== undefined) {
+        if (armor.useDexterity === true) {
+            // лёгкая и средняя броня - добавляем модификатор ловкости
+            let dexBonus = player.characteristic.dexterity
+            if (dexBonus > 2) {
+                dexBonus = 2
+            } else if (dexBonus < -2) {
+                dexBonus = -2
+            }
+            armorAc = armor.baseAc + dexBonus
+            console.log(`|  База брони: ${armor.baseAc} + модификатор ловкости (${dexBonus}) = ${armorAc}`)
+        } else {
+            // тяжёлая броня - без модификатора ловкости
+            armorAc = armor.baseAc
+            console.log(`|  База брони: ${armor.baseAc}`)
+        }
+    } 
+    // для магической брони
+    else if (armor.stats && armor.stats.baseAc !== undefined) {
+        if (armor.stats.useDexterity === true) {
+            let dexBonus = player.characteristic.dexterity
+            if (dexBonus > 2) {
+                dexBonus = 2
+            } else if (dexBonus < -2) {
+                dexBonus = -2
+            }
+            armorAc = armor.stats.baseAc + dexBonus
+        } else {
+            armorAc = armor.stats.baseAc
+        }
+    }
+    // старый формат брони (для совместимости)
+    else {
+        armorAc = armor.ac || 10
+    }
+    
+    // сохраняем рассчитанный КД в предмете для последующего снятия
+    armor.currentAc = armorAc
+    
     player.inventory.armors.armor = armor
-    player.stats.ac += armor.ac
+    player.stats.ac += armorAc
     player.stats.stealth = armor.stealth !== undefined ? armor.stealth : true
     
     // применение бонусов от магической брони
     if (armor.target === 'strenght') {
-        player.characteristic.strenght += armor.effect
+        player.characteristic.strenght += armor.effect || 0
     } else if (armor.target === 'dexterity') {
-        player.characteristic.dexterity += armor.effect
+        player.characteristic.dexterity += armor.effect || 0
     } else if (armor.target === 'physique') {
-        player.characteristic.physique += armor.effect
+        player.characteristic.physique += armor.effect || 0
     } else if (armor.target === 'intelligence') {
-        player.characteristic.intelligence += armor.effect
+        player.characteristic.intelligence += armor.effect || 0
     } else if (armor.target === 'wisdom') {
-        player.characteristic.wisdom += armor.effect
+        player.characteristic.wisdom += armor.effect || 0
     } else if (armor.target === 'charisma') {
-        player.characteristic.charisma += armor.effect
+        player.characteristic.charisma += armor.effect || 0
     }
     
     // удаление брони из инвентаря
@@ -241,14 +284,16 @@ const equipShield = (shield) => {
     // снятие текущего щита
     if (player.inventory.armors.shield !== '') {
         const currentShield = player.inventory.armors.shield
-        player.stats.ac -= currentShield.ac
+        const currentAc = currentShield.baseAc || currentShield.ac || 2
+        player.stats.ac -= currentAc
         player.inventory.storageItemsStats.push(currentShield)
         addHistory(`Снял щит ${currentShield.name}`)
     }
     
     // надевание нового щита
+    const shieldAc = shield.baseAc || shield.ac || 2
     player.inventory.armors.shield = shield
-    player.stats.ac += shield.ac
+    player.stats.ac += shieldAc
     
     // удаление щита из инвентаря
     const shieldIndex = player.inventory.storageItemsStats.findIndex(i => i.name === shield.name)
@@ -297,24 +342,24 @@ const equipWeapon = (weapon, slot) => {
 const unequipArmor = () => {
     if (player.inventory.armors.armor !== '') {
         const currentArmor = player.inventory.armors.armor
-        player.stats.ac -= currentArmor.ac
+        const currentAc = calculateArmorAc(currentArmor)
+        player.stats.ac -= currentAc
         
         // снятие бонусов от магической брони
         if (currentArmor.target === 'strenght') {
-            player.characteristic.strenght -= currentArmor.effect
+            player.characteristic.strenght -= currentArmor.effect || 0
         } else if (currentArmor.target === 'dexterity') {
-            player.characteristic.dexterity -= currentArmor.effect
+            player.characteristic.dexterity -= currentArmor.effect || 0
         } else if (currentArmor.target === 'physique') {
-            player.characteristic.physique -= currentArmor.effect
+            player.characteristic.physique -= currentArmor.effect || 0
         } else if (currentArmor.target === 'intelligence') {
-            player.characteristic.intelligence -= currentArmor.effect
+            player.characteristic.intelligence -= currentArmor.effect || 0
         } else if (currentArmor.target === 'wisdom') {
-            player.characteristic.wisdom -= currentArmor.effect
+            player.characteristic.wisdom -= currentArmor.effect || 0
         } else if (currentArmor.target === 'charisma') {
-            player.characteristic.charisma -= currentArmor.effect
+            player.characteristic.charisma -= currentArmor.effect || 0
         }
         
-        // возврат брони в инвентарь
         player.inventory.storageItemsStats.push(currentArmor)
         player.inventory.armors.armor = ''
         player.stats.stealth = true
@@ -329,7 +374,8 @@ const unequipArmor = () => {
 const unequipShield = () => {
     if (player.inventory.armors.shield !== '') {
         const currentShield = player.inventory.armors.shield
-        player.stats.ac -= currentShield.ac
+        const currentAc = calculateArmorAc(currentShield)
+        player.stats.ac -= currentAc
         player.inventory.storageItemsStats.push(currentShield)
         player.inventory.armors.shield = ''
         console.log(`|  Вы сняли ${currentShield.name}. Класс брони: ${player.stats.ac}.`)
@@ -363,30 +409,42 @@ const unequipWeapon = (slot) => {
 
 // отображение инвентаря
 const showInventory = () => {
-    console.log('\n|  ==================== ИНВЕНТАРЬ ====================')
+    console.log('==================== ИНВЕНТАРЬ ====================')
     console.log(`|  Монеты: ${player.inventory.coins}`)
-    console.log('\n|  --- Экипировка ---')
-    console.log(`|  Броня: ${player.inventory.armors.armor !== '' ? player.inventory.armors.armor.name : 'пусто'}`)
-    console.log(`|  Щит: ${player.inventory.armors.shield !== '' ? player.inventory.armors.shield.name : 'пусто'}`)
+    console.log('  --- Экипировка ---')
+    
+    // отображение брони с правильным КД
+    if (player.inventory.armors.armor !== '') {
+        const armor = player.inventory.armors.armor
+        const armorAc = calculateArmorAc(armor)
+        console.log(`|  Броня: ${armor.name} (КД: ${armorAc})`)
+    } else {
+        console.log(`|  Броня: пусто`)
+    }
+    
+    console.log(`|  Щит: ${player.inventory.armors.shield !== '' ? player.inventory.armors.shield.name + ' (КД: +' + (player.inventory.armors.shield.baseAc || 2) + ')' : 'пусто'}`)
     console.log(`|  Оружие (1 слот): ${player.inventory.weapon.firstWeapon !== '' ? player.inventory.weapon.firstWeapon.name : 'пусто'}`)
     console.log(`|  Оружие (2 слот): ${player.inventory.weapon.secondWeapon !== '' ? player.inventory.weapon.secondWeapon.name : 'пусто'}`)
     
-    // отображение предметов в инвентаре
     if (player.inventory.storageItemsStats.length > 0) {
-        console.log('\n|  --- Предметы ---')
+        console.log('  --- Предметы ---')
         for (let i = 0; i < player.inventory.storageItemsStats.length; i++) {
             const item = player.inventory.storageItemsStats[i]
             console.log(`|  ${i + 1}. ${item.name} - ${item.class || 'Предмет'}`)
         }
     } else {
-        console.log('\n|  У вас нет предметов в инвентаре.')
+        console.log('|  У вас нет предметов в инвентаре.')
     }
-    console.log('|  ==================================================')
+    console.log('==================================================')
 }
 
 // отображение характеристик персонажа
 const showStats = () => {
-    console.log('\n|  ==================== ХАРАКТЕРИСТИКИ ====================')
+    // проверка смерти перед показом статистики
+    if (!checkPlayerDeath()) {
+        return
+    }
+    console.log('==================== ХАРАКТЕРИСТИКИ ====================')
     console.log(`|  Имя: ${player.name}`)
     console.log(`|  Сила: ${player.characteristic.strenght}`)
     console.log(`|  Ловкость: ${player.characteristic.dexterity}`)
@@ -399,14 +457,18 @@ const showStats = () => {
     console.log(`|  Класс брони: ${player.stats.ac}`)
     console.log(`|  Скорость: ${player.stats.speed}`)
     console.log(`|  Скрытность: ${player.stats.stealth ? 'да' : 'нет'}`)
-    console.log('|  ========================================================')
+    console.log('========================================================')
 }
 
 // меню управления инвентарём
 const inventoryManagement = () => {
+    // проверка смерти перед входом в инвентарь
+    if (!checkPlayerDeath()) {
+        return
+    }
     while (true) {
         showInventory()
-        console.log('\n|  Действия с инвентарём:')
+        console.log('|  Действия с инвентарём:')
         console.log('|  1. Использовать предмет')
         console.log('|  2. Надеть броню')
         console.log('|  3. Надеть щит')
@@ -431,7 +493,7 @@ const inventoryManagement = () => {
                 continue
             }
             
-            console.log('\n|  Выберите предмет для использования:')
+            console.log('|  Выберите предмет для использования:')
             for (let i = 0; i < player.inventory.storageItemsStats.length; i++) {
                 const item = player.inventory.storageItemsStats[i]
                 console.log(`|  ${i + 1}. ${item.name}`)
@@ -453,7 +515,7 @@ const inventoryManagement = () => {
                 continue
             }
             
-            console.log('\n|  Выберите броню для надевания:')
+            console.log('|  Выберите броню для надевания:')
             for (let i = 0; i < armorsList.length; i++) {
                 console.log(`|  ${i + 1}. ${armorsList[i].name} (КБ: ${armorsList[i].ac})`)
             }
@@ -473,7 +535,7 @@ const inventoryManagement = () => {
                 continue
             }
             
-            console.log('\n|  Выберите щит для надевания:')
+            console.log('|  Выберите щит для надевания:')
             for (let i = 0; i < shieldsList.length; i++) {
                 console.log(`|  ${i + 1}. ${shieldsList[i].name} (КБ: +${shieldsList[i].ac})`)
             }
@@ -493,7 +555,7 @@ const inventoryManagement = () => {
                 continue
             }
             
-            console.log('\n|  Выберите оружие для экипировки в первый слот:')
+            console.log('|  Выберите оружие для экипировки в первый слот:')
             for (let i = 0; i < weaponsList.length; i++) {
                 const weapon = weaponsList[i]
                 let damage = weapon.damage || (weapon.stats ? weapon.stats.damage : '?')
@@ -515,7 +577,7 @@ const inventoryManagement = () => {
                 continue
             }
             
-            console.log('\n|  Выберите оружие для экипировки во второй слот:')
+            console.log('|  Выберите оружие для экипировки во второй слот:')
             for (let i = 0; i < weaponsList.length; i++) {
                 const weapon = weaponsList[i]
                 let damage = weapon.damage || (weapon.stats ? weapon.stats.damage : '?')
@@ -556,10 +618,14 @@ const inventoryManagement = () => {
 
 // движение вперёд (генерация и выполнение случайного события)
 const moveForward = async () => {
+    // проверка смерти перед действием
+    if (!checkPlayerDeath()) {
+        return
+    }
+    
     gameState.stepsInLocation++
     addHistory(`Переход на шаг ${gameState.stepsInLocation} в локации ${locations[gameState.currentLocation].name}`)
     
-    // получение случайного события
     const event = getRandomEvent(gameState.currentLocation)
     if (!event) {
         console.log('|  Ошибка получения события.')
@@ -569,37 +635,46 @@ const moveForward = async () => {
     addHistory(`Встреча с событием: ${event.name} (${event.type})`)
     const result = await executeEvent(event, gameState.currentLocation)
     
-    // обработка смерти персонажа
-    if (result === 'death') {
-        addHistory(`Смерть персонажа в локации ${locations[gameState.currentLocation].name}`)
-        console.log('\n|  ==================== ВЫ УМЕРЛИ ====================')
-        console.log('|  1. Загрузить последнее сохранение')
-        console.log('|  2. Выйти в главное меню')
-        
-        const choice = readlineSync.question('|  Action: ')
-        if (choice === '1') {
-            if (loadGame()) {
-                addHistory(`Загрузка сохранения после смерти`)
-                return
-            } else {
-                gameState.isRunning = false
-            }
-        } else {
-            gameState.isRunning = false
-        }
-    } 
-    // обработка перехода между локациями
-    else if (result && result.type === 'exit') {
+    if (result && typeof result === 'object' && result.type === 'exit') {
         addHistory(`Переход из ${locations[gameState.currentLocation].name} в ${locations[result.nextLocation].name}`)
         gameState.currentLocation = result.nextLocation
         gameState.stepsInLocation = 0
         console.log(`|  Вы в локации: ${locations[gameState.currentLocation].name}`)
     }
+    
+    //  проверка смерти
+    checkPlayerDeath()
+}
+
+// функция проверки смерти игрока
+const checkPlayerDeath = () => {
+    if (player.stats.hits <= 0) {
+        addHistory(`Смерть персонажа в локации ${locations[gameState.currentLocation].name}`)
+        console.log('==================== ВЫ УМЕРЛИ ====================')
+        console.log('|  1. Загрузить последнее сохранение')
+        console.log('|  2. Выйти в главное меню')
+        
+        const choice = readlineSync.question('|  Action: ')
+        if (choice === '1') {
+            const loaded = loadGame()
+            if (loaded) {
+                addHistory(`Загрузка сохранения после смерти`)
+                return true
+            } else {
+                console.log('|  Не удалось загрузить сохранение.')
+                gameState.isRunning = false
+                return false
+            }
+        } else {
+            return menu()
+        }
+    }
+    return true
 }
 
 // отображение главного меню игры
 const showMainMenu = () => {
-    console.log('\n|  ==================== ГЛАВНОЕ МЕНЮ ====================')
+    console.log('==================== ГЛАВНОЕ МЕНЮ ====================')
     console.log(`|  Текущая локация: ${locations[gameState.currentLocation].name}`)
     console.log('|  1. Идти вперёд')
     console.log('|  2. Инвентарь')
@@ -608,59 +683,76 @@ const showMainMenu = () => {
     console.log('|  5. Сохранить игру')
     console.log('|  6. Загрузить игру')
     console.log('|  7. Выйти в главное меню')
-    console.log('|  ======================================================')
+    console.log('======================================================')
 }
 
-// основная функция игры (экспортируемая)
+// основная функция игры
 export const game = async () => {
     gameState.isRunning = true
     
-    console.log('\n|  ==================== НАЧАЛО ИГРЫ ====================')
+    // проверка что игрок жив после загрузки
+    if (player.stats.hits <= 0) {
+        console.log('==================== ВЫ УМЕРЛИ ====================')
+        console.log('|  1. Загрузить последнее сохранение')
+        console.log('|  2. Выйти в главное меню')
+        
+        const choice = readlineSync.question('|  Action: ')
+        if (choice === '1') {
+            const loaded = loadGame()
+            if (loaded) {
+                addHistory(`Загрузка сохранения`)
+            } else {
+                console.log('|  Не удалось загрузить сохранение.')
+                gameState.isRunning = false
+                return
+            }
+        } else {
+            gameState.isRunning = false
+            return
+        }
+    }
+    
+    console.log('==================== НАЧАЛО ИГРЫ ====================')
     console.log(`|  Добро пожаловать, ${player.name}!`)
     console.log(`|  Вы находитесь в ${locations[gameState.currentLocation].name}`)
-    console.log('|  ======================================================')
+    console.log(`|  Здоровье: ${player.stats.hits}/${player.stats.max_hits}`)
+    console.log('======================================================')
     
     addHistory(`Начало игры. Персонаж ${player.name} появился в локации ${locations[gameState.currentLocation].name}`)
     
-    // главный игровой цикл
     while (gameState.isRunning) {
         showMainMenu()
         const action = readlineSync.question('|  Action: ')
         
-        // движение вперёд
         if (action === '1') {
             await moveForward()
-        } 
-        // управление инвентарём
-        else if (action === '2') {
+        } else if (action === '2') {
             inventoryManagement()
-        } 
-        // просмотр характеристик
-        else if (action === '3') {
+        } else if (action === '3') {
             showStats()
-        } 
-        // просмотр истории действий
-        else if (action === '4') {
+        } else if (action === '4') {
             showHistory()
-        } 
-        // сохранение игры
-        else if (action === '5') {
+        } else if (action === '5') {
             saveGame()
             addHistory(`Сохранение игры`)
-        } 
-        // загрузка игры
-        else if (action === '6') {
-            loadGame()
-            addHistory(`Загрузка игры. Текущая локация: ${locations[gameState.currentLocation].name}`)
-            console.log(`|  Вы в локации: ${locations[gameState.currentLocation].name}`)
-        } 
-        // выход в главное меню
-        else if (action === '7') {
+        } else if (action === '6') {
+            const loaded = loadGame()
+            if (loaded) {
+                addHistory(`Загрузка игры. Текущая локация: ${locations[gameState.currentLocation].name}`)
+                console.log(`|  Вы в локации: ${locations[gameState.currentLocation].name}`)
+                console.log(`|  Здоровье: ${player.stats.hits}/${player.stats.max_hits}`)
+            }
+        } else if (action === '7') {
             console.log('|  Возврат в главное меню...')
             addHistory(`Выход в главное меню`)
-            gameState.isRunning = false
+            return menu()
         } else {
             console.log('|  Некорректный ввод.')
+        }
+        
+        // после каждого действия проверяем смерть
+        if (!checkPlayerDeath()) {
+            break
         }
     }
 }

@@ -6,6 +6,7 @@ import { gameState } from '../Game/game.js'
 import { armors } from '../items/armor.js'
 import { arms } from '../items/arms.js'
 import { potions, magicstaffs, artifacts } from '../items/magicItems.js'
+import { calculateArmorAc } from '../items/armor.js'
 
 const characteristicChecker = (characteristics) => {
   let characteristicPoints = 11
@@ -71,13 +72,13 @@ const inventoryChoose = () => {
       return characteristicChoose()
     case '2':
       player.inventory.armors.armor = armors.lightArmor.quiltedArmor
-      player.stats.ac = armors.lightArmor.quiltedArmor.ac
+      player.stats.ac = calculateArmorAc(armors.lightArmor.quiltedArmor)
       player.inventory.weapon.firstWeapon = arms.simpleHandWeapons.baton
       player.inventory.storageItemsStats.push(potions.healingPotion, potions.healingPotion, potions.healingPotion, potions.resistancePotion)
       break
     case '3':
       player.inventory.armors.armor = armors.lightArmor.quiltedArmor
-      player.stats.ac = armors.lightArmor.quiltedArmor.ac
+      player.stats.ac = calculateArmorAc(armors.lightArmor.quiltedArmor)
       player.inventory.weapon.firstWeapon = arms.simpleHandWeapons.knife
       player.inventory.weapon.secondWeapon = arms.simpleRangeWeapon.sling
       player.inventory.storageItemsStats.push(potions.healingPotion, potions.healingPotion, potions.dexterityPotion)
@@ -117,9 +118,7 @@ const finalPlayerChoose = async () => {
         gameState.currentLocation = 'catacombs'
     }
     
-    console.log('\n|  Персонаж создан!')
-    console.log(player)
-    
+    console.log('|  Персонаж создан!')
     const { game } = await import('../Game/game.js')
     return game()
 }
