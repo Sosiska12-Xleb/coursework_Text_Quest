@@ -21,25 +21,13 @@ export const spalls = {
   fieryWhip2: { name: 'Огнненный хлыст 2 ур.', class: 'Огненное заклинание', effect: diceRandomizer(6, 2), time: diceRandomizer(6), price: 2, explanation: 'Посох воссозадет огненный хлыст бьющий по выбранному существу, поджигая его.' },
   fieryWhip3: { name: 'Огнненный хлыст 3 ур.', class: 'Огненное заклинание', effect: diceRandomizer(8, 2), time: diceRandomizer(6), price: 3, explanation: 'Посох воссозадет огненный хлыст бьющий по выбранному существу, поджигая его.' },
 
-  fireStorm1: { name: 'Огнненная буря 1 ур.', class: 'Огненное заклинание', subclass: 'Массовое', effect: diceRandomizer(4, 2), time: diceRandomizer(6), price: 3, explanation: 'Из посоха высвобоьждается огненная буря, наносяшая урон всем существам в видимости.' },
-  fireStorm2: { name: 'Огнненная буря 2 ур.', class: 'Огненное заклинание', subclass: 'Массовое', effect: diceRandomizer(6, 2), time: diceRandomizer(6), price: 4, explanation: 'Из посоха высвобоьждается огненная буря, наносяшая урон всем существам в видимости.' },
-  fireStorm3: { name: 'Огнненная буря 3 ур.', class: 'Огненное заклинание', subclass: 'Массовое', effect: diceRandomizer(8, 2), time: diceRandomizer(6), price: 5, explanation: 'Из посоха высвобоьждается огненная буря, наносяшая урон всем существам в видимости.' },
-
   bloodyBite1: { name: 'Кровавый укус 1 ур.', class: 'Вампирское заклинание', effect: diceRandomizer(6), price: 1, explanation: 'Выбранное существо теряет свои жизненые силы, которые отдаются владельцу посоха.' },
   bloodyBite2: { name: 'Кровавый укус 2 ур.', class: 'Вампирское заклинание', effect: diceRandomizer(6, 2), price: 3, explanation: 'Выбранное существо теряет свои жизненые силы, которые отдаются владельцу посоха.' },
   bloodyBite3: { name: 'Кровавый укус 3 ур.', class: 'Вампирское заклинание', effect: diceRandomizer(6, 3), price: 4, explanation: 'Выбранное существо теряет свои жизненые силы, которые отдаются владельцу посоха.' },
 
-  witheringSwarm1: { name: 'Иссушающий рой 1 ур.', class: 'Вампирское заклинание', effect: diceRandomizer(6), subclass: 'Массовое', price: 4, explanation: 'Происходит вызов роя летущих мышей вампиров, иссушающие всех врогов в видимости.' },
-  witheringSwarm2: { name: 'Иссушающий рой 2 ур.', class: 'Вампирское заклинание', effect: diceRandomizer(6, 2), subclass: 'Массовое', price: 5, explanation: 'Происходит вызов роя летущих мышей вампиров, иссушающие всех врогов в видимости.' },
-  witheringSwarm3: { name: 'Иссушающий рой 3 ур.', class: 'Вампирское заклинание', effect: diceRandomizer(6, 3), subclass: 'Массовое', price: 6, explanation: 'Происходит вызов роя летущих мышей вампиров, иссушающие всех врогов в видимости.' },
-
   poisonousSpray1: { name: 'Ядовитые брызги 1 ур.', class: 'Токсичное заклинание', effect: diceRandomizer(4), price: 2, explanation: 'Из посоха вылетает ядовитый снаряд, отравляющий врага.' },
   poisonousSpray2: { name: 'Ядовитые брызги 2 ур.', class: 'Токсичное заклинание', effect: diceRandomizer(6), price: 4, explanation: 'Из посоха вылетает ядовитый снаряд, отравляющий врага.' },
   poisonousSpray3: { name: 'Ядовитые брызги 3 ур.', class: 'Токсичное заклинание', effect: diceRandomizer(8), price: 6, explanation: 'Из посоха вылетает ядовитый снаряд, отравляющий врага.' },
-
-  toxicCloud1: { name: 'Токсичное облако 1 ур.', class: 'Токсичное заклинание', effect: diceRandomizer(4), subclass: 'Массовое', price: 4, explanation: 'Вокруг врагов в видимости появляется токсичное облако отравляющее их.' },
-  toxicCloud2: { name: 'Токсичное облако 2 ур.', class: 'Токсичное заклинание', effect: diceRandomizer(6), subclass: 'Массовое', price: 6, explanation: 'Вокруг врагов в видимости появляется токсичное облако отравляющее их.' },
-  toxicCloud3: { name: 'Токсичное облако 3 ур.', class: 'Токсичное заклинание', effect: diceRandomizer(6, 2), subclass: 'Массовое', price: 8, explanation: 'Вокруг врагов в видимости появляется токсичное облако отравляющее их.' },
 
   magicalResistance: { name: 'Магическое сопротивление', class: 'Заклинание активатор', target: 'resistance', time: 4, price: 5, explanation: 'Существо несущее посох получает сопротивление к урону.' },
 
@@ -71,19 +59,16 @@ export const spalls = {
   increaseCharisma2: { name: 'Повышение харизмы 2 ур.', class: 'Заклинание характеристик', effect: 2, target: 'charisma', price: 4, explanation: 'Существо несущее посох умеренно повышает значение харизмы.' },
   increaseCharisma3: { name: 'Повышение харизмы 3 ур.', class: 'Заклинание характеристик', effect: 3, target: 'charisma', price: 5, explanation: 'Существо несущее посох сильно повышает значение харизмы.' },
 
-  attackBoost1: { name: 'Повышение атаки 1 ур.', class: 'Заклинание атаки', effect: diceRandomizer(4), price: 2, explanation: 'До конца боя владелец посоха увеличивает бонус атаки от оружия.' },
-  attackBoost2: { name: 'Повышение атаки 2 ур.', class: 'Заклинание атаки', effect: diceRandomizer(6), price: 3, explanation: 'До конца боя владелец посоха увеличивает бонус атаки от оружия.' },
-  attackBoost3: { name: 'Повышение атаки 3 ур.', class: 'Заклинание атаки', effect: diceRandomizer(8), price: 4, explanation: 'До конца боя владелец посоха увеличивает бонус атаки от оружия.' },
+  attackBoost1: { name: 'Повышение атаки 1 ур.', class: 'Заклинание атаки', effect: diceRandomizer(4), target: 'timeAttack', price: 2, explanation: 'До конца боя владелец посоха увеличивает бонус атаки от оружия.' },
+  attackBoost2: { name: 'Повышение атаки 2 ур.', class: 'Заклинание атаки', effect: diceRandomizer(6), target: 'timeAttack', price: 3, explanation: 'До конца боя владелец посоха увеличивает бонус атаки от оружия.' },
+  attackBoost3: { name: 'Повышение атаки 3 ур.', class: 'Заклинание атаки', effect: diceRandomizer(8), target: 'timeAttack', price: 4, explanation: 'До конца боя владелец посоха увеличивает бонус атаки от оружия.' },
 
-  damageBoost1: { name: 'Повышение урона 1 ур.', class: 'Заклинание атаки', effect: diceRandomizer(6), price: 2, explanation: 'До конца боя владелец посоха увеличивает урон от атак.' },
-  damageBoost2: { name: 'Повышение урона 2 ур.', class: 'Заклинание атаки', effect: diceRandomizer(8), price: 3, explanation: 'До конца боя владелец посоха увеличивает урон от атак.' },
-  damageBoost3: { name: 'Повышение урона 3 ур.', class: 'Заклинание атаки', effect: diceRandomizer(12), price: 4, explanation: 'До конца боя владелец посоха увеличивает урон от атак.' },
+  damageBoost1: { name: 'Повышение урона 1 ур.', class: 'Заклинание атаки', effect: diceRandomizer(6), target: 'timeDamage', price: 2, explanation: 'До конца боя владелец посоха увеличивает урон от атак.' },
+  damageBoost2: { name: 'Повышение урона 2 ур.', class: 'Заклинание атаки', effect: diceRandomizer(8), target: 'timeDamage', price: 3, explanation: 'До конца боя владелец посоха увеличивает урон от атак.' },
+  damageBoost3: { name: 'Повышение урона 3 ур.', class: 'Заклинание атаки', effect: diceRandomizer(12), target: 'timeDamage', price: 4, explanation: 'До конца боя владелец посоха увеличивает урон от атак.' },
 
-  massLightning1: { name: 'Массовая молния 1 ур.', class: 'Атакующее заклинание', subclass: 'Массовое', effect: diceRandomizer(8, 2), price: 3, explanation: 'По всем врагам в видимости бьёт молния.' },
-  massLightning2: { name: 'Массовая молния 2 ур.', class: 'Атакующее заклинание', subclass: 'Массовое', effect: diceRandomizer(8, 3), price: 3, explanation: 'По всем врагам в видимости бьёт молния.' },
-
-  damageDiceBoost1: { name: 'Повышение множителя урона 1 ур.', class: 'Заклинание атаки', effect: 1, price: 5, explanation: 'До конца боя увеличивается множитель (кол-во костей) от атак.' },
-  damageDiceBoost2: { name: 'Повышение множителя урона 2 ур.', class: 'Заклинание атаки', effect: 2, price: 9, explanation: 'До конца боя увеличивается множитель (кол-во костей) от атак.' },
+  damageDiceBoost1: { name: 'Повышение множителя урона 1 ур.', class: 'Заклинание атаки', effect: 1, target: 'timeDiceX', price: 5, explanation: 'До конца боя увеличивается множитель (кол-во костей) от атак.' },
+  damageDiceBoost2: { name: 'Повышение множителя урона 2 ур.', class: 'Заклинание атаки', effect: 2, target: 'timeDiceX', price: 9, explanation: 'До конца боя увеличивается множитель (кол-во костей) от атак.' },
 
   lifesphere: { name: 'Жизнесфера', class: 'Заклинание активатор', target: 'invulnerability', price: 13, explanation: 'Вледелец посоха получает полную неуязвимость от атак.' },
 }

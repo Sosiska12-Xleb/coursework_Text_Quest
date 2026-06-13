@@ -1,25 +1,18 @@
-import { diceRandomizer } from "./diceRandomizer.js"
-import { spalls } from "./items/spalls.js"
+import { diceRandomizer } from "../diceRandomizer.js"
+import { spalls } from "../items/spalls.js"
 
-export const enemies = {
-    giantRat: {
+export const enemies = [
+    {
         name: "Гигантская крыса",
         hits: 7,
         ac: 13,
         speed: 1,
-
-        characteristic: {
-            strenght: 2,
-            dexterity: 3,
-            physique: 0,
-            intelligence: -4,
-            wisdom: 0,
-            charisma: -3,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -34,24 +27,17 @@ export const enemies = {
 
 
 
-    giantBat: {
+    {
         name: "Гигантская летучая мышь",
         hits: 22,
         ac: 13,
         speed: 2,
-
-        characteristic: {
-            strenght: 2,
-            dexterity: 3,
-            physique: 0,
-            intelligence: -4,
-            wisdom: 1,
-            charisma: -2,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -66,24 +52,17 @@ export const enemies = {
 
 
 
-    giantCentipede: {
+    {
         name: "Гигантская многоножка",
         hits: 9,
         ac: 14,
         speed: 1,
-
-        characteristic: {
-            strenght: -3,
-            dexterity: 2,
-            physique: +1,
-            intelligence: -5,
-            wisdom: -2,
-            charisma: -4,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -99,24 +78,17 @@ export const enemies = {
 
 
 
-    giantSpider: {
+    {
         name: "Гигантский паук",
         hits: 26,
         ac: 14,
         speed: 1,
-
-        characteristic: {
-            strenght: 2,
-            dexterity: 3,
-            physique: 1,
-            intelligence: -4,
-            wisdom: 0,
-            charisma: -3,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -131,31 +103,24 @@ export const enemies = {
                 class: "Дальний",
                 attack: 0,
                 damage: 0,
-                effect: {class: "Снижение характеристик", effect: -1, target: "speed"}
+                effect: {class: "Снижение скорости", subEffect: 1}
             }
         }
     },
 
 
 
-    giantWolfSpider: {
+    {
         name: "Гигантский паук-волк",
         hits: 11,
         ac: 13,
         speed: 2,
-
-        characteristic: {
-            strenght: 1,
-            dexterity: 3,
-            physique: 1,
-            intelligence: -4,
-            wisdom: 1,
-            charisma: -3,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -170,24 +135,17 @@ export const enemies = {
 
 
 
-    bandit: {
+    {
         name: "Бандит",
         hits: 11,
         ac: 12,
         speed: 1,
-
-        characteristic: {
-            strenght: 0,
-            dexterity: 1,
-            physique: 1,
-            intelligence: 0,
-            wisdom: 0,
-            charisma: 0,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -208,24 +166,17 @@ export const enemies = {
 
     
 
-    banditCaptain: {
+    {
         name: "Бандит капитан",
         hits: 52,
         ac: 15,
         speed: 1,
-
-        characteristic: {
-            strenght: 2,
-            dexterity: 3,
-            physique: 2,
-            intelligence: 2,
-            wisdom: 0,
-            charisma: 2,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -247,24 +198,17 @@ export const enemies = {
 
 
 
-    berserker: {
+    {
         name: "Берсерк",
         hits: 68,
         ac: 13,
         speed: 1,
-
-        characteristic: {
-            strenght: 3,
-            dexterity: 1,
-            physique: 3,
-            intelligence: -1,
-            wisdom: 0,
-            charisma: -1,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -277,24 +221,17 @@ export const enemies = {
         }
     },
 
-    berserkerCommander: {
-        name: "Берсерк",
+    {
+        name: "Берсерк-босс",
         hits: 136,
         ac: 16,
         speed: 1,
-
-        characteristic: {
-            strenght: 4,
-            dexterity: 2,
-            physique: 4,
-            intelligence: 0,
-            wisdom: 2,
-            charisma: -1,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -316,24 +253,17 @@ export const enemies = {
 
 
 
-    assassin: {
+    {
         name: "Ассасин",
         hits: 97,
         ac: 16,
         speed: 1,
-
-        characteristic: {
-            strenght: 0,
-            dexterity: 4,
-            physique: 2,
-            intelligence: 3,
-            wisdom: 0,
-            charisma: 0,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -356,24 +286,17 @@ export const enemies = {
 
 
 
-    tough: {
+    {
         name: "Бугай",
         hits: 32,
         ac: 12,
         speed: 1,
-
-        characteristic: {
-            strenght: 2,
-            dexterity: 1,
-            physique: 2,
-            intelligence: 0,
-            wisdom: 0,
-            charisma: 0,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -394,24 +317,17 @@ export const enemies = {
 
 
 
-    toughBoss: {
+    {
         name: "Бугай босс",
         hits: 82,
         ac: 16,
         speed: 1,
-
-        characteristic: {
-            strenght: 3,
-            dexterity: 2,
-            physique: 3,
-            intelligence: 0,
-            wisdom: 0,
-            charisma: 0,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -433,24 +349,17 @@ export const enemies = {
 
     
 
-    warriorInfantry: {
+    {
         name: "Воин пехотинец",
         hits: 9,
         ac: 13,
         speed: 1,
-
-        characteristic: {
-            strenght: 1,
-            dexterity: 0,
-            physique: 0,
-            intelligence: -1,
-            wisdom: 0,
-            charisma: -1,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -465,24 +374,17 @@ export const enemies = {
 
     
 
-    warriorVeteran: {
+    {
         name: "Воин ветереан",
         hits: 65,
         ac: 17,
         speed: 1,
-
-        characteristic: {
-            strenght: 3,
-            dexterity: 1,
-            physique: 2,
-            intelligence: 0,
-            wisdom: 0,
-            charisma: 0,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -504,24 +406,17 @@ export const enemies = {
 
 
 
-    druid: {
+    {
         name: "Друид",
         hits: 13,
         ac: 14,
         speed: 1,
-
-        characteristic: {
-            strenght: 0,
-            dexterity: 1,
-            physique: 1,
-            intelligence: 1,
-            wisdom: 3,
-            charisma: 0,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -546,31 +441,24 @@ export const enemies = {
             tacticalBreakthrough1: {
                 name: "тактический рывок",
                 class: "Заклинание характеристик",
-                effect: spalls.tacticalBreakthrough1
+                SpellEffect: spalls.tacticalBreakthrough1
             }
         }
     },
 
 
 
-    mageApprentice: {
+    {
         name: "Маг ученик",
         hits: 49,
         ac: 15,
         speed: 1,
-
-        characteristic: {
-            strenght: -1,
-            dexterity: 2,
-            physique: 1,
-            intelligence: 3,
-            wisdom: 1,
-            charisma: 0,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -595,31 +483,24 @@ export const enemies = {
             magicPlates2: {
                 name: "магические пластины",
                 class: "Заклинание характеристик",
-                effect: spalls.magicPlates2
+                SpellEffect: spalls.magicPlates2
             }
         }
     },
 
 
 
-    mage: {
+    {
         name: "Маг",
         hits: 81,
         ac: 15,
         speed: 1,
-
-        characteristic: {
-            strenght: -1,
-            dexterity: 2,
-            physique: 0,
-            intelligence: 3,
-            wisdom: 4,
-            charisma: 0,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -646,31 +527,24 @@ export const enemies = {
             magicPlates2: {
                 name: "магические пластины",
                 class: "Заклинание характеристик",
-                effect: spalls.magicPlates2
+                SpellEffect: spalls.magicPlates2
             }
         }
     },
 
 
 
-    archMage: {
+    {
         name: "Архимаг",
         hits: 170,
         ac: 17,
         speed: 1,
-
-        characteristic: {
-            strenght: 0,
-            dexterity: 2,
-            physique: 1,
-            intelligence: 5,
-            wisdom: 2,
-            charisma: 3,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -696,36 +570,29 @@ export const enemies = {
             magicPlates2: {
                 name: "магические пластины",
                 class: "Заклинание характеристик",
-                effect: spalls.magicPlates2
+                SpellEffect: spalls.magicPlates2
             },
             tacticalBreakthrough3: {
                 name: "тактический рывок",
                 class: "Заклинание характеристик",
-                effect: spalls.tacticalBreakthrough3
+                SpellEffect: spalls.tacticalBreakthrough3
             }
         }
     },
 
 
 
-    deathCultist: {
+    {
         name: "Культист смерти",
         hits: 121,
         ac: 17,
         speed: 1,
-
-        characteristic: {
-            strenght: 4,
-            dexterity: 1,
-            physique: 4,
-            intelligence: 1,
-            wisdom: 3,
-            charisma: 2,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -752,31 +619,24 @@ export const enemies = {
             magicPlates2: {
                 name: "магические пластины",
                 class: "Заклинание характеристик",
-                effect: spalls.magicPlates2
+                SpellEffect: spalls.magicPlates2
             }
         }
     },
 
 
 
-    fiendCultist: {
+    {
         name: "Культист исчадия",
         hits: 127,
         ac: 16,
         speed: 1,
-
-        characteristic: {
-            strenght: 4,
-            dexterity: 2,
-            physique: 3,
-            intelligence: 1,
-            wisdom: 4,
-            charisma: 0,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -799,24 +659,17 @@ export const enemies = {
 
 
 
-    blackGreatwyrm: {
+    {
         name: "Великий чёрный вирм",
         hits: 533,
         ac: 22,
         speed: 4,
-
-        characteristic: {
-            strenght: 10,
-            dexterity: 2,
-            physique: 10,
-            intelligence: 5,
-            wisdom: 5,
-            charisma: 8,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -849,24 +702,17 @@ export const enemies = {
         }
     },
 
-    aboultCrystalDragon: {
+    {
         name: "Взрослый кристаллический дракон",
         hits: 172,
         ac: 16,
         speed: 2,
-
-        characteristic: {
-            strenght: 5,
-            dexterity: 1,
-            physique: 5,
-            intelligence: 4,
-            wisdom: 2,
-            charisma: 4,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -892,31 +738,24 @@ export const enemies = {
             tacticalBreakthrough2: {
                 name: "тактический рывок",
                 class: "Заклинание характеристик",
-                effect: spalls.tacticalBreakthrough2
+                SpellEffect: spalls.tacticalBreakthrough2
             }
         }
     },
 
 
 
-    ironGolem: {
+    {
         name: "Железный голем",
         hits: 252,
         ac: 20,
         speed: 1,
-
-        characteristic: {
-            strenght: 7,
-            dexterity: -1,
-            physique: 5,
-            intelligence: -4,
-            wisdom: 0,
-            charisma: -5,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -945,24 +784,17 @@ export const enemies = {
 
 
 
-    helmedHorror: {
+   {
         name: "Управляемый ужас",
         hits: 68,
         ac: 20,
         speed: 1,
-
-        characteristic: {
-            strenght: 4,
-            dexterity: 1,
-            physique: 3,
-            intelligence: 0,
-            wisdom: 0,
-            charisma: 0,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -978,24 +810,17 @@ export const enemies = {
 
 
 
-    shieldGuardian: {
+    {
         name: "Щитостраж",
         hits: 142,
         ac: 17,
         speed: 1,
-
-        characteristic: {
-            strenght: 4,
-            dexterity: -1,
-            physique: 4,
-            intelligence: 7,
-            wisdom: 0,
-            charisma: -4,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -1011,24 +836,17 @@ export const enemies = {
 
 
 
-    animatedArmor: {
+    {
         name: "Оживленный доспех",
         hits: 33,
         ac: 18,
         speed: 1,
-
-        characteristic: {
-            strenght: 2,
-            dexterity: 0,
-            physique: 1,
-            intelligence: -5,
-            wisdom: -4,
-            charisma: -5,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -1044,24 +862,17 @@ export const enemies = {
 
 
 
-    monodrone: {
+    {
         name: "Монодрон",
         hits: 5,
         ac: 15,
         speed: 1,
-
-        characteristic: {
-            strenght: 0,
-            dexterity: 2,
-            physique: 1,
-            intelligence: -3,
-            wisdom: 0,
-            charisma: -3,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -1080,24 +891,17 @@ export const enemies = {
         }
     },
 
-    duodrone: {
+    {
         name: "Дуодрон",
         hits: 11,
         ac: 15,
         speed: 1,
-
-        characteristic: {
-            strenght: 0,
-            dexterity: 1,
-            physique: 1,
-            intelligence: -2,
-            wisdom: 0,
-            charisma: -2,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -1119,24 +923,17 @@ export const enemies = {
 
 
 
-    tridrone: {
+    {
         name: "Тридрон",
         hits: 16,
         ac: 15,
         speed: 1,
-
-        characteristic: {
-            strenght: 1,
-            dexterity: 1,
-            physique: 1,
-            intelligence: -1,
-            wisdom: 0,
-            charisma: -1,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -1158,24 +955,17 @@ export const enemies = {
 
 
 
-    Quadrone: {
+    {
         name: "Квадрон",
         hits: 22,
         ac: 16,
         speed: 1,
-
-        characteristic: {
-            strenght: 0,
-            dexterity: 2,
-            physique: 1,
-            intelligence: -3,
-            wisdom: 0,
-            charisma: -3,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -1197,24 +987,17 @@ export const enemies = {
 
 
 
-    skeleton: {
+    {
         name: "Скелет",
         hits: 13,
         ac: 14,
         speed: 1,
-
-        characteristic: {
-            strenght: 0,
-            dexterity: 3,
-            physique: 2,
-            intelligence: -2,
-            wisdom: -1,
-            charisma: -3,
-        },
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -1235,24 +1018,17 @@ export const enemies = {
 
 
 
-    minotaurSkeleton: {
-        name: "Скелет",
+    {
+        name: "Скелет минотавра",
         hits: 45,
         ac: 12,
-        speed: 40,
-
-        characteristic: {
-            strenght: 4,
-            dexterity: 0,
-            physique: 2,
-            intelligence: -2,
-            wisdom: -1,
-            charisma: -3,
-        },
+        speed: 1,
+        distance: 0,
 
         timeEffects: {
-            fire: false,
-            acid: false
+            time: 0,
+            fire: 0,
+            acid: 0
         },
 
         attack: {
@@ -1270,4 +1046,4 @@ export const enemies = {
             }
         }
     }
-}
+]

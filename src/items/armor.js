@@ -1,4 +1,4 @@
-import { player } from '../player.js'
+import { player } from '../Game/player.js'
 
 export const dexterityRangeChecker = (num) => {
   if (num > 2) {
@@ -28,5 +28,5 @@ export const armors = {
     stackedArmor: { name: 'Наборный доспех', class: 'Доспех', price: 200, ac: 17, strenghtRequirement: 15, stealth: false, rerity: 5 },
     plateArmor: { name: 'Латы', class: 'Доспех', price: 1500, ac: 18, strenghtRequirement: 15, stealth: false, rerity: 2 },
   },
-  shield: { name: 'Щит', class: 'Доспех', price: 10, ac: 2, strenghtRequirement: 0, rerity: 9 }
+  shield: { name: 'Щит', class: 'Щит', price: 10, ac: 2, strenghtRequirement: 0, rerity: 9 }
 }

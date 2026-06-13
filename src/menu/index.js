@@ -29,9 +29,6 @@ const menu = () => {
         clearScreen()
         return about()
       case '5':
-        clearScreen()
-        return achievements()
-      case '6':
         console.log('Инициализация выхода...')
         return
       default:

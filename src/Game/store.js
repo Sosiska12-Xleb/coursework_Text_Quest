@@ -1,11 +1,11 @@
 import readlineSync from 'readline-sync'
 import fs from 'fs'
 import { clearScreen } from "./index.js"
-import { arms } from "./items/arms.js"
-import { armors } from "./items/armor.js"
-import { magicArmor, magicWeapon, magicstaffs, artifacts, potions } from "./items/magicItems.js"
+import { arms } from "../items/arms.js"
+import { armors } from "../items/armor.js"
+import { magicArmor, magicWeapon, magicstaffs, artifacts, potions } from "../items/magicItems.js"
 import { player } from "./player.js"
-import { diceRandomizer } from './diceRandomizer.js'
+import { diceRandomizer } from '../diceRandomizer.js'
 
 const coinsChecker = (price) => {
     if (player.inventory.coins >= price) {
@@ -22,7 +22,7 @@ const sell = (returnFunction) => {
     console.log("Список ваших вещей:")
     let orderNum = 1
     let prices = []
-    for (let i = 0; i < player.inventory.storageItemsStats.length; i++) {
+    for (let i = 0; i < player.inventory.storageItemsStats.length; i += 1) {
         const item = player.inventory.storageItemsStats[i]
         orderNum += 1
         console.log(`${orderNum}. ${item.name} (Цена: ${Math.floor(item.price / 2)})`)
@@ -49,7 +49,7 @@ const sell = (returnFunction) => {
 export const storeLight1 = (message = "") => {
     clearScreen()
     console.log(message)
-    const content = fs.readFileSync('assets/storeLight1.txt', 'utf-8')
+    const content = fs.readFileSync('assets/stores/storeLight1.txt', 'utf-8')
     console.log(content)
     const action = readlineSync.question('Action: ')
     switch(action) {
@@ -262,7 +262,7 @@ export const storeLight1 = (message = "") => {
 export const storeLight2 = (message = "") => {
     clearScreen()
     console.log(message)
-    const content = fs.readFileSync('assets/storeLight2.txt', 'utf-8')
+    const content = fs.readFileSync('assets/stores/storeLight2.txt', 'utf-8')
     console.log(content)
     const action = readlineSync.question('Action: ')
     switch(action) {
@@ -466,7 +466,7 @@ export const storeLight2 = (message = "") => {
 export const storeLight3 = (message = "") => {
     clearScreen()
     console.log(message)
-    const content = fs.readFileSync('assets/storeLight3.txt', 'utf-8')
+    const content = fs.readFileSync('assets/stores/storeLight3.txt', 'utf-8')
     console.log(content)
     const action = readlineSync.question('Action: ')
     switch(action) {
@@ -680,7 +680,7 @@ export const storeLight3 = (message = "") => {
 export const storeMedium1 = (message = "") => {
     clearScreen()
     console.log(message)
-    const content = fs.readFileSync('assets/storeMedium1.txt', 'utf-8')
+    const content = fs.readFileSync('assets/stores/storeMedium1.txt', 'utf-8')
     console.log(content)
     const action = readlineSync.question('Action: ')
     switch(action) {
@@ -886,7 +886,7 @@ export const storeMedium1 = (message = "") => {
 export const storeMedium2 = (message = "") => {
     clearScreen()
     console.log(message)
-    const content = fs.readFileSync('assets/storeMedium2.txt', 'utf-8')
+    const content = fs.readFileSync('assets/stores/storeMedium2.txt', 'utf-8')
     console.log(content)
     const action = readlineSync.question('Action: ')
     switch(action) {
@@ -1095,7 +1095,7 @@ export const storeMedium2 = (message = "") => {
 export const storeMedium3 = (message = "") => {
     clearScreen()
     console.log(message)
-    const content = fs.readFileSync('assets/storeMedium3.txt', 'utf-8')
+    const content = fs.readFileSync('assets/stores/storeMedium3.txt', 'utf-8')
     console.log(content)
     const action = readlineSync.question('Action: ')
     switch(action) {
@@ -1299,7 +1299,7 @@ export const storeMedium3 = (message = "") => {
 export const storeHard1 = (message = "") => {
     clearScreen()
     console.log(message)
-    const content = fs.readFileSync('assets/storeHard1.txt', 'utf-8')
+    const content = fs.readFileSync('assets/stores/storeHard1.txt', 'utf-8')
     console.log(content)
     const action = readlineSync.question('Action: ')
     switch(action) {
@@ -1492,7 +1492,7 @@ export const storeHard1 = (message = "") => {
 export const storeHard2 = (message = "") => {
     clearScreen()
     console.log(message)
-    const content = fs.readFileSync('assets/storeHard2.txt', 'utf-8')
+    const content = fs.readFileSync('assets/stores/storeHard2.txt', 'utf-8')
     console.log(content)
     const action = readlineSync.question('Action: ')
     switch(action) {
@@ -1694,7 +1694,7 @@ export const storeHard2 = (message = "") => {
 export const storeHard3 = (message = "") => {
     clearScreen()
     console.log(message)
-    const content = fs.readFileSync('assets/storeHard3.txt', 'utf-8')
+    const content = fs.readFileSync('assets/stores/storeHard3.txt', 'utf-8')
     console.log(content)
     const action = readlineSync.question('Action: ')
     switch(action) {

@@ -15,7 +15,8 @@ export let player = {
     hits: 15,
     time_hits: 0,
     speed: 1,
-    drunkard: false
+    drunkard: false,
+    stealth: true,
   },
 
   inventory: {
@@ -26,8 +27,6 @@ export let player = {
   },
 
   timeEffects: {
-    stealth: true,
-
     timeStrenght: 0,
     timeDexterity: 0,
     timePhysique: 0,
@@ -40,13 +39,15 @@ export let player = {
 
     timeAttack: 0,
     timeDamage: 0,
-    timeDiceX: 0,
-
-    resistance: false,
-    invulnerability: false,
-    spikes: false,
-    fireAttack: false,
-    fire: false,
-    acid: false
+    timeDiceX: 1,
+  },
+  otherTimeEffects: {
+      resistance: false,
+      invulnerability: false,
+      spikes: false,
+      fireAttack: false,
+      time: 0,
+      fire: 0,
+      acid: 0
   }
 }
