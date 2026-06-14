@@ -4,7 +4,6 @@ import { menu } from './index.js'
 const achievements = () => {
   console.log('|  ==================== ДОСТИЖЕНИЯ ====================')
   console.log('|  Раздел достижений находится в разработке.')
-  console.log('|  Следите за обновлениями!')
   console.log('|  ===================================================')
   
   let action = readlineSync.question('|  Нажмите Enter для возврата в меню...')

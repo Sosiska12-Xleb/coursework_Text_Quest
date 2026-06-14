@@ -1,4 +1,3 @@
-// файл боевой системы
 import readlineSync from 'readline-sync'
 import fs from 'fs'
 import { diceRandomizer } from "../diceRandomizer.js"

@@ -1,17 +1,5 @@
 import { player } from '../Game/player.js'
 
-export const dexterityRangeChecker = (num) => {
-  if (num > 2) {
-    return 2
-  }
-  else if (num < -2) {
-    return -2
-  }
-  else {
-    return num
-  }
-}
-
 // функция для получения актуального КД брони
 export const calculateArmorAc = (armor) => {
     if (!armor) {

@@ -1,11 +1,10 @@
-// импорт необходимых модулей
 import readlineSync from 'readline-sync'
 import { player } from './player.js'
 import { locations, getRandomEvent, executeEvent } from './locate.js'
 import { saveGame, loadGame } from './save.js'
 import { addHistory, showHistory, clearHistory } from './history.js'
 import { menu } from '../menu/index.js'
-import { calculateArmorAc, dexterityRangeChecker } from '../items/armor.js'
+import { calculateArmorAc } from '../items/armor.js'
 
 // состояние игры (текущая локация, флаг работы, количество шагов)
 export let gameState = {

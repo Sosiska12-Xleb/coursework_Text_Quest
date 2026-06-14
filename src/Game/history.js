@@ -10,7 +10,7 @@ const MAX_HISTORY_SIZE = 100
 export const addHistory = (action) => {
     // создание временной метки
     const timestamp = new Date().toLocaleTimeString()
-    // добавление записи в начало массива (свежие записи сверху)
+    // добавление записи в начало массива
     historyLog.unshift({ time: timestamp, action: action })
     
     // ограничение размера истории (удаление старых записей)
